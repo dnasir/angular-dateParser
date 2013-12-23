@@ -1,5 +1,5 @@
 /* 
- *   Angular DateParser 1.0.1
+ *   Angular DateParser 1.0.2
  *   https://github.com/dnasir/angular-dateParser
  *
  *   Copyright 2013, Dzulqarnain Nasir
@@ -10,7 +10,7 @@
  */
 
 angular.module('dateParser', [])
-    .factory('DateParser', ['$locale', function($locale) {
+    .factory('$dateParser', ['$locale', '$log', function($locale, $log) {
 
         // Fetch date and time formats from $locale service
         var datetimeFormats = $locale.DATETIME_FORMATS;
@@ -19,23 +19,36 @@ angular.module('dateParser', [])
         var monthNames = datetimeFormats.MONTH.concat(datetimeFormats.SHORTMONTH);
         var dayNames = datetimeFormats.DAY.concat(datetimeFormats.SHORTDAY);
 
+        var isInteger = function(val) {
+            var digits="1234567890";
+            for (var i=0; i < val.length; i++) {
+                if (digits.indexOf(val.charAt(i))==-1) return false;
+            }
+            return true;
+        };
+
         var getInt = function(str, i, minlength, maxlength) {
             for (var x = maxlength; x >= minlength; x--) {
                 var token = str.substring(i, i + x);
                 if (token.length < minlength) {
                     return null;
                 }
-                if (!isNaN(+token) && angular.isNumber(+token)) {
+                if (isInteger(token)) {
                     return token;
                 }
             }
             return null;
         };
 
-        return {
-            parse: function(val, format) {
+        return function(val, format) {
+            try {
                 val = val + '';
                 format = format + '';
+
+                // If no format is provided, just pass it to the Date constructor
+                if(!format.length) {
+                    return new Date(val);
+                }
 
                 // Check if format exists in the format collection
                 if (datetimeFormats[format]) {
@@ -71,7 +84,7 @@ angular.module('dateParser', [])
                         }
 
                         if(val.substring(i_val, i_val + token.length) != token) {
-                            return undefined;
+                            throw 'Pattern value mismatch';
                         }
 
                         i_val += token.length;
@@ -102,7 +115,7 @@ angular.module('dateParser', [])
                         }
                         year = getInt(val, i_val, x, y);
                         if (year === null) {
-                            return undefined;
+                            throw 'Invalid year';
                         }
                         i_val += year.length;
                         if (year.length == 2) {
@@ -126,7 +139,7 @@ angular.module('dateParser', [])
                             }
                         }
                         if ((month < 1) || (month > 12)) {
-                            return undefined;
+                            throw 'Invalid month';
                         }
                     } else if (token == 'EEEE' || token == 'EEE') {
                         for (var j = 0; j < dayNames.length; j++) {
@@ -139,37 +152,37 @@ angular.module('dateParser', [])
                     } else if (token == 'MM' || token == 'M') {
                         month = getInt(val, i_val, token.length, 2);
                         if (month === null || (month < 1) || (month > 12)) {
-                            return undefined;
+                            throw 'Invalid month';
                         }
                         i_val += month.length;
                     } else if (token == 'dd' || token == 'd') {
                         date = getInt(val, i_val, token.length, 2);
                         if (date === null || (date < 1) || (date > 31)) {
-                            return undefined;
+                            throw 'Invalid date';
                         }
                         i_val += date.length;
                     } else if (token == 'HH' || token == 'H') {
                         hh = getInt(val, i_val, token.length, 2);
                         if (hh === null || (hh < 0) || (hh > 23)) {
-                            return undefined;
+                            throw 'Invalid hours';
                         }
                         i_val += hh.length;
                     } else if (token == 'hh' || token == 'h') {
                         hh = getInt(val, i_val, token.length, 2);
                         if (hh === null || (hh < 1) || (hh > 12)) {
-                            return undefined;
+                            throw 'Invalid hours';
                         }
                         i_val += hh.length;
                     } else if (token == 'mm' || token == 'm') {
                         mm = getInt(val, i_val, token.length, 2);
                         if (mm === null || (mm < 0) || (mm > 59)) {
-                            return undefined;
+                            throw 'Invalid minutes';
                         }
                         i_val += mm.length;
                     } else if (token == 'ss' || token == 's') {
                         ss = getInt(val, i_val, token.length, 2);
                         if (ss === null || (ss < 0) || (ss > 59)) {
-                            return undefined;
+                            throw 'Invalid seconds';
                         }
                         i_val += ss.length;
                     } else if (token == 'a') {
@@ -178,12 +191,12 @@ angular.module('dateParser', [])
                         } else if (val.substring(i_val, i_val + 2).toLowerCase() == 'pm') {
                             ampm = 'PM';
                         } else {
-                            return undefined;
+                            throw 'Invalid AM/PM';
                         }
                         i_val += 2;
                     } else {
                         if (val.substring(i_val, i_val + token.length) != token) {
-                            return undefined;
+                            throw 'Pattern value mismatch';
                         } else {
                             i_val += token.length;
                         }
@@ -191,7 +204,7 @@ angular.module('dateParser', [])
                 }
                 // If there are any trailing characters left in the value, it doesn't match
                 if (i_val != val.length) {
-                    return undefined;
+                    throw 'Pattern value mismatch';
                 }
 
                 // TODO: Not sure if this is still required
@@ -200,17 +213,17 @@ angular.module('dateParser', [])
                     // Check for leap year
                     if (((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0)) { // leap year
                         if (date > 29) {
-                            return undefined;
+                            throw 'Invalid date';
                         }
                     } else {
                         if (date > 28) {
-                            return undefined;
+                            throw 'Invalid date';
                         }
                     }
                 }
                 if ((month == 4) || (month == 6) || (month == 9) || (month == 11)) {
                     if (date > 30) {
-                        return undefined;
+                        throw 'Invalid date';
                     }
                 }
 
@@ -222,10 +235,14 @@ angular.module('dateParser', [])
                 }
 
                 return new Date(year, month - 1, date, hh, mm, ss);
+            } catch(e) {
+                $log.error(e);
+
+                return new Date(undefined);
             }
-        }
+        };
     }])
-    .directive('dateParser', ['dateFilter', 'DateParser', function(dateFilter, DateParser) {
+    .directive('dateParser', ['dateFilter', '$dateParser', function(dateFilter, $dateParser) {
         return {
             restrict: 'A',
             require: 'ngModel',
@@ -233,30 +250,14 @@ angular.module('dateParser', [])
                 var dateFormat;
                 
                 attrs.$observe('dateParser', function(value) {
-                    dateFormat = value || undefined;
+                    dateFormat = value;
                     ngModel.$render();
                 });
 
                 var parseDate = function(viewValue) {
-                    var date;
-                    var format = dateFormat;
+                    var date = $dateParser(viewValue, dateFormat);
 
-                    // If no format is provided, just pass it to the Date constructor
-                    if(angular.isUndefined(dateFormat)) {
-                        date = new Date(viewValue);
-
-                        if(isNaN(date)) {
-                            ngModel.$setValidity('date', false);
-                            return undefined;
-                        } else {
-                            ngModel.$setValidity('date', true);
-                            return date;
-                        }
-                    }
-
-                    date = DateParser.parse(viewValue, dateFormat);
-
-                    if(angular.isUndefined(date)) {
+                    if(isNaN(date)) {
                         ngModel.$setValidity('date', false);
                     } else {
                         ngModel.$setValidity('date', true);
@@ -267,7 +268,7 @@ angular.module('dateParser', [])
                 ngModel.$parsers.unshift(parseDate);
 
                 ngModel.$render = function() {
-                    var date =  ngModel.$viewValue ? dateFilter(ngModel.$viewValue, dateFormat) : '';
+                    var date =  ngModel.$modelValue ? dateFilter(ngModel.$modelValue, dateFormat) : '';
                     element.val(date);
                     scope.ngModel = ngModel.$modelValue;
                 };
