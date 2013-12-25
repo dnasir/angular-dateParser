@@ -26,9 +26,7 @@ This is REQUIRED.
 
 ### dateParser (string)
 
-This is the directive that initialises the parser. The value in this parameter is the format that will be used when parsing.
-
-This is REQUIRED.
+This is the directive that initialises the parser. The value defined as parameter is the format that will be used when parsing. This is optional, and if no format is provided, the parser will simply pass the input value to the Date constructor.
 
 <sub>Added: 1.0.0</sub>
 
