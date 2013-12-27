@@ -1,5 +1,5 @@
 /* 
- *   Angular DateParser 1.0.2
+ *   Angular DateParser 1.0.3
  *   https://github.com/dnasir/angular-dateParser
  *
  *   Copyright 2013, Dzulqarnain Nasir
@@ -75,6 +75,7 @@ angular.module('dateParser', [])
 
                     var token = '';
 
+                    // TODO: Handle double single quotes
                     // Handle quote marks for strings within format string
                     if(format.charAt(i_format) == "'") {
                         var _i_format = i_format;
@@ -207,7 +208,6 @@ angular.module('dateParser', [])
                     throw 'Pattern value mismatch';
                 }
 
-                // TODO: Not sure if this is still required
                 // Is date valid for month?
                 if (month == 2) {
                     // Check for leap year
@@ -239,45 +239,6 @@ angular.module('dateParser', [])
                 $log.error(e);
 
                 return new Date(undefined);
-            }
-        };
-    }])
-    .directive('dateParser', ['dateFilter', '$dateParser', function(dateFilter, $dateParser) {
-        return {
-            restrict: 'A',
-            require: 'ngModel',
-            link: function(scope, element, attrs, ngModel) {
-                var dateFormat;
-                
-                attrs.$observe('dateParser', function(value) {
-                    dateFormat = value;
-                    ngModel.$render();
-                });
-
-                var parseDate = function(viewValue) {
-                    var date = $dateParser(viewValue, dateFormat);
-
-                    if(isNaN(date)) {
-                        ngModel.$setValidity('date', false);
-                    } else {
-                        ngModel.$setValidity('date', true);
-                    }
-
-                    return date;
-                };
-                ngModel.$parsers.unshift(parseDate);
-
-                ngModel.$render = function() {
-                    var date =  ngModel.$modelValue ? dateFilter(ngModel.$modelValue, dateFormat) : '';
-                    element.val(date);
-                    scope.ngModel = ngModel.$modelValue;
-                };
-
-                element.bind('input change keyup', function() {
-                    scope.$apply(function() {
-                        scope.ngModel = ngModel.$modelValue;
-                    });
-                });
             }
         };
     }]);

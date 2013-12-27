@@ -18,6 +18,7 @@ module.exports = function(config) {
       'misc/test-lib/angular.js',
       'misc/test-lib/angular-mocks.js',
       './dateparser.js',
+      './dateparser.directive.js',
       'test/*.js'
     ],
 
