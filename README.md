@@ -10,29 +10,17 @@ A simple parser that converts date and time strings into JavaScript Date objects
 
 ## Usage
 
-Include the parser directive file, and attach it to an input field.
+Simply include the parser file, add it as a dependency and call it like so:
 
-    <input type="text" ng-model="date" date-parser="dd.MM.yyyy HH:mm" />
+    $dateParser(string, format)
 
-## Parameters
+The first parameter is the date and time string you wish to convert to a Date object, and the second parameter is the format you're using. The format is optional, so if you're using the RFC2822 or ISO 8601 date formats, you're more or less safe, as the parser will simply pass the string to the Date constructor.
 
-### ngModel (Date)
-
-This is the model that the element is bound to. The parser will update this model when the input field value is changed.
-
-This is REQUIRED.
-
-<sub>Added: 1.0.0</sub>
-
-### dateParser (string)
-
-This is the directive that initialises the parser. The value defined as parameter is the format that will be used when parsing. This is optional, and if no format is provided, the parser will simply pass the input value to the Date constructor.
-
-<sub>Added: 1.0.0</sub>
+Expected return value is a JavaScript Date object, be it valid or otherwise.
 
 ## Date formats
 
-All Date formats specified in the Date filter documentation can be used, as well as custom formats.
+All Date formats specified in the Date filter documentation can be used, as well as custom formats. See the demo for examples.
 
 ## Localisation
 
