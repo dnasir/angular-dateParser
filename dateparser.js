@@ -1,5 +1,5 @@
 /* 
- *   Angular DateParser 1.0.3
+ *   Angular DateParser 1.0.4
  *   https://github.com/dnasir/angular-dateParser
  *
  *   Copyright 2013, Dzulqarnain Nasir
@@ -67,7 +67,8 @@ angular.module('dateParser', [])
                     hh = 0,
                     mm = 0,
                     ss = 0,
-                    ampm = '';
+                    ampm = '',
+                    z = now.getTimezoneOffset() * -1;
 
                 while (i_format < format.length) {
                     // Get next token from format string
@@ -99,7 +100,6 @@ angular.module('dateParser', [])
                     }
 
                     // Extract contents of value based on format token
-                    // TODO: Implement timezone offset (Z) extractor
                     // TODO: Implement millisecond (.sss or ,sss) extractor
                     if (token == 'yyyy' || token == 'yy' || token == 'y') {
                         if (token == 'yyyy') {
@@ -195,6 +195,15 @@ angular.module('dateParser', [])
                             throw 'Invalid AM/PM';
                         }
                         i_val += 2;
+                    } else if (token == 'Z') {
+                        var tzStr = val.substring(i_val, i_val + 5);
+                        var z = (parseInt(tzStr.substr(0, 3)) * 60) + parseInt(tzStr.substr(3, 2));
+
+                        if (z > 720 || z < -720) {
+                            throw 'Invalid timezone';
+                        }
+
+                        i_val += 5;
                     } else {
                         if (val.substring(i_val, i_val + token.length) != token) {
                             throw 'Pattern value mismatch';
@@ -234,7 +243,9 @@ angular.module('dateParser', [])
                     hh -= 12;
                 }
 
-                return new Date(year, month - 1, date, hh, mm, ss);
+                var localDate = new Date(year, month - 1, date, hh, mm, ss);
+
+                return new Date(localDate.getTime() + (z + localDate.getTimezoneOffset()) * 60 * 1000);
             } catch(e) {
                 $log.error(e);
 
