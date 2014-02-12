@@ -6,7 +6,7 @@ A simple parser that converts date and time strings into JavaScript Date objects
 
 ## Prerequisites
 
-1. Angular 1.0.1+
+1. [Angular 1.0.1+](http://angularjs.org)
 
 ## Usage
 
@@ -20,8 +20,8 @@ Expected return value is a JavaScript Date object, be it valid or otherwise.
 
 ## Date formats
 
-All Date formats specified in the Date filter documentation can be used, as well as custom formats. See the demo for examples.
+All Date formats specified in the [Date filter documentation](http://docs.angularjs.org/api/ng.filter:date) can be used, as well as custom formats. See the demo for examples.
 
 ## Localisation
 
-This parser depends on the $locale service to provide it with the list of formats, as well as names of months and days. To use this feature, include the locale file included in the Angular bundle.
+This parser depends on the [$locale service](http://docs.angularjs.org/api/ng.$locale) to provide it with the list of formats, as well as names of months and days. To use this feature, include the locale file included in the Angular bundle.
