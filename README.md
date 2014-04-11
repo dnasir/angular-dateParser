@@ -25,3 +25,18 @@ All Date formats specified in the [Date filter documentation](http://docs.angula
 ## Localisation
 
 This parser depends on the [$locale service](http://docs.angularjs.org/api/ng.$locale) to provide it with the list of formats, as well as names of months and days. To use this feature, include the locale file included in the Angular bundle.
+
+If you wish that the service should be automatically updated when the locale changes, you may instruct it to do so using the provider:
+
+```javascript
+angular.module('myApp', ['dateParser'])
+  .config(function($dateParserProvider) {
+	$dateParserProvider.watchLocale(true);
+  })
+```
+
+You also may update it manually:
+
+```javascript
+$dateParser.updateFromLocale();
+```
