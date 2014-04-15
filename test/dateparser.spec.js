@@ -28,16 +28,24 @@ describe('dateParser', function() {
             var str1 = '17.12.2013',
                 str2 = '17-12-2013 12:59',
                 str3 = 'December 17, 2013 12:59',
-                str4 = '4:15 in the morning';
+                str4 = '4:15 in the morning',
+                str5 = '4/3/2014 10:45:45.345',
+                str6 = 'November 8, 1983 9:55pm',
+                str7 = '2011-04-01';
 
             var format1 = 'dd.MM.yyyy',
                 format2 = 'dd-MM-yyyy HH:mm',
                 format3 = 'MMMM d, yyyy HH:mm',
-                format4 = "h:m 'in the morning'";
+                format4 = "h:m 'in the morning'",
+                format5 = 'd/M/yyyy H:mm:ss.sss',
+                format6 = 'MMMM d, yyyy h:mma',
+                format7 = 'yy-MMMM-dd';
 
             var expected1 = new Date(2013, 11, 17, 0, 0, 0),
                 expected2 = new Date(2013, 11, 17, 12, 59, 0),
-                expected3 = new Date(2013, 11, 17, 12, 59, 0);
+                expected3 = new Date(2013, 11, 17, 12, 59, 0),
+                expected5 = new Date(2014, 2, 4, 10, 45, 45, 345),
+                expected6 = new Date(1983, 10, 8, 21, 55, 0);
 
             expect($dateParser(str1, format1).getTime()).toBe(expected1.getTime());
             expect($dateParser(str2, format2).getTime()).toBe(expected2.getTime());
@@ -46,6 +54,10 @@ describe('dateParser', function() {
             var result4 = $dateParser(str4, format4);
             expect(result4.getHours()).toBe(4);
             expect(result4.getMinutes()).toBe(15);
+
+            expect($dateParser(str5, format5).getTime()).toBe(expected5.getTime());
+            expect($dateParser(str6, format6).getTime()).toBe(expected6.getTime());
+            expect($dateParser(str7, format7)).toBe(undefined);
         }));
 
         it('should properly parse timezones', inject(function($dateParser) {
@@ -67,18 +79,21 @@ describe('dateParser', function() {
             expect($dateParser(str6, format).getUTCMinutes()).toBe(29);
         }));
 
-        it('should return Invalid Date for invalid date strings', inject(function($dateParser) {
+        it('should return undefined for invalid date strings and pattern mismatches', inject(function($dateParser) {
             var str1 = '29.02.2013',
                 str2 = '31-04-2013',
-                str3 = 'November 31, 2013';
+                str3 = 'November 31, 2013',
+                str4 = '12/12/2012';
 
             var format1 = 'dd.MM.yyyy',
                 format2 = 'dd-MM-yyyy',
-                format3 = 'MMMM d, yyyy';
+                format3 = 'MMMM d, yyyy',
+                format4 = 'dd/MMMM/yy';
 
-            expect(isNaN($dateParser(str1, format1))).toBe(true);
-            expect(isNaN($dateParser(str2, format2))).toBe(true);
-            expect(isNaN($dateParser(str3, format3))).toBe(true);
+            expect($dateParser(str1, format1)).toBe(undefined);
+            expect($dateParser(str2, format2)).toBe(undefined);
+            expect($dateParser(str3, format3)).toBe(undefined);
+            expect($dateParser(str4, format4)).toBe(undefined);
         }));
     });
 
