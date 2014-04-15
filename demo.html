@@ -39,21 +39,30 @@
                 border-radius: 4px 0 4px 0;
             }
 
-			.dn-timepicker-popup {
-	            max-height: 300px;
-	            overflow-y: scroll;
-	        }
+			.footer {
+                text-align: center;
+                padding: 30px 0;
+                margin-top: 70px;
+                border-top: 1px solid #e5e5e5;
+                background-color: #f5f5f5;
+            }
+
+            .footer p {
+                margin-bottom: 0;
+            }
 		</style>
 	</head>
 	<body>
 		<div class="container" ng-controller="controller">
 			<header class="page-header">
-                <h1>Angular DateParser <small>Demo</small></h1>
+                <h1>AngularJS DateParser <small>Demo</small></h1>
             </header>
 
-            <p>This parser converts date and time strings into JavaScript Date objects.</p>
+            <p>The AngularJS library has a <a href="http://docs.angularjs.org/api/ng/filter/date" target="_blank" title="AngularJS date filter">date filter</a> that allows JavaScript Date objects to be displayed using a provided format. This is an awesome feature, and it's great that you can use it anywhere, including text input boxes. But the problem is that it only works one-way. There's currently no way to convert strings back into Date objects while using the same format initially used to display it. This parser was designed to overcome this problem.</p>
 
             <h4>Basic</h4>
+            <p>This is a basic example demonstrating how the parser can convert manually entered date strings into JavaScript Date objects.</p>
+
 			<div class="bs-docs-example">
                 <p>
                     <div class="input-prepend">
@@ -63,13 +72,15 @@
                 </p>
                 <p>Selected date: {{date | date:'MMM d, y h:mm'}}</p>
 			</div>
+
             <h6>Code</h6>
             <div>
 <pre class="brush: html">&lt;input type="text" ng-model="date" date-parser="dd.MM.yyyy HH:mm" /&gt;</pre>
             </div>
 
             <h4>Using Angular Date Formats</h4>
-            <p>Use all the shortname formats provided by Angular.</p>
+            <p>The AngularJS date filter comes with several shortname formats that you can use. The DateParser can recognise these formats and will convert the date strings accordingly.</p>
+
             <div class="bs-docs-example">
                 <p>
                     <div class="input-prepend">
@@ -124,6 +135,7 @@
                 </p>
                 <p>Selected date: {{date | date:'MMM d, y h:mm'}}</p>
             </div>
+
             <h6>Code</h6>
             <div>
 <pre class="brush: html">&lt;input type="text" ng-model="date" date-parser="medium" /&gt;
@@ -138,7 +150,8 @@
             </div>
 
             <h4>Dynamic Formats</h4>
-            <p>Format can be dynamically changed and the view will automatically update to use the new format.</p>
+            <p>Date string formats can be changed on-the-fly and associated views will automatically be updated to use the new format.</p>
+
             <div class="bs-docs-example">
                 <div class="input-prepend">
                     <span class="add-on">Format</span>
@@ -148,13 +161,37 @@
                     <span class="add-on">Date</span>
                     <input type="text" ng-model="date" date-parser="{{format}}" />
                 </div>
-                <p>Selected date: {{date | date:'MMM d, y h:mm Z'}}</p>
+                <p>Selected date: {{date | date:'MMM d, y h:mm'}}</p>
             </div>
+
             <h6>Code</h6>
             <div ng-non-bindable>
 <pre class="brush: html" ng->&lt;input type="text" ng-model="date" date-parser="{{format}}" /&gt;</pre>
             </div>
+
+            <h4>Timezones</h4>
+            <p>The parser also allows you to change the timezone. However, bear in mind that the model will still contain the date and time for the local timezone, minus the offset.</p>
+
+            <div class="bs-docs-example">
+                <div class="input-prepend">
+                    <span class="add-on">Date</span>
+                    <input type="text" ng-model="date" date-parser="dd/MM/yyyy HH:mm Z" />
+                </div>
+                <p>Selected date: {{date | date:'MMM d, y h:mm Z'}}</p>
+            </div>
+            
+            <h6>Code</h6>
+            <div ng-non-bindable>
+<pre class="brush: html" ng->&lt;input type="text" ng-model="date" date-parser="dd/MM/yyyy HH:mm Z" /&gt;</pre>
+            </div>
 		</div>
+
+        <footer class="footer">
+            <div class="container">
+                <p>Copyright &copy; 2014 <a href="http://dnasir.com" title="Dzulqarnain Nasir">Dzulqarnain Nasir</a></p>
+                <p>Code licensed under <a href="http://opensource.org/licenses/MIT" target="_blank" title="The MIT License">MIT License</a></p>
+            </div>
+        </footer>
 
 		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js"></script>
 		<script src="dateparser.js"></script>
@@ -163,6 +200,8 @@
             function controller($scope) {
                 $scope.format = 'dd.MM.yyyy';
                 $scope.date = new Date();
+
+
             }
         </script>
 
