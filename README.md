@@ -16,7 +16,7 @@ Simply include the parser file, add it as a dependency and call it like so:
 
 The first parameter is the date and time string you wish to convert to a Date object, and the second parameter is the format you're using. The format is optional, so if you're using the RFC2822 or ISO 8601 date formats, you're more or less safe, as the parser will simply pass the string to the Date constructor.
 
-Expected return value is a JavaScript Date object, be it valid or otherwise.
+Expected return value is a JavaScript Date object, or undefined if values are invalid.
 
 ## Date formats
 
