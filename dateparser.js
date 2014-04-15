@@ -1,5 +1,5 @@
 /* 
- *   Angular DateParser 1.0.5
+ *   Angular DateParser 1.0.7
  *   https://github.com/dnasir/angular-dateParser
  *
  *   Copyright 2013, Dzulqarnain Nasir
@@ -11,13 +11,16 @@
 
 angular.module('dateParser', [])
     .factory('dateParserHelpers', [function() {
+
+        'use strict';
+
         return {
 
             // Returns true if string contains only integers
-            isJustNumbers: function(string) {
+            hasOnlyIntegers: function(string) {
                 if(!string) return false;
 
-                var digits = "1234567890";
+                var digits = '1234567890';
 
                 for (var i = 0; i < string.length; i++) {
                     if (digits.indexOf(string.charAt(i)) == -1) return false;
@@ -31,7 +34,7 @@ angular.module('dateParser', [])
                 for (var i = maxLength; i >= minLength; i--) {
                     var extracted = string.substring(startPoint, startPoint + i);
 
-                    if(this.isJustNumbers(extracted)) {
+                    if(this.hasOnlyIntegers(extracted)) {
                         return extracted;
                     }
                 }
@@ -40,6 +43,8 @@ angular.module('dateParser', [])
         };
     }])
     .factory('$dateParser', ['$locale', 'dateParserHelpers', function($locale, dateParserHelpers) {
+
+        'use strict';
 
         // Fetch date and time formats from $locale service
         var datetimeFormats = $locale.DATETIME_FORMATS;
@@ -79,8 +84,8 @@ angular.module('dateParser', [])
                     hh = 0,
                     mm = 0,
                     ss = 0,
+                    sss = 0,
                     ampm = 'am',
-                    now = new Date(),
                     z = 0,
                     parsedZ = false;
 
@@ -115,7 +120,6 @@ angular.module('dateParser', [])
                     }
 
                     // Extract contents of value based on format token
-                    // TODO: Implement millisecond (.sss or ,sss) extractor
                     if (token == 'yyyy' || token == 'yy' || token == 'y') {
                         var minLength, maxLength;
 
@@ -227,6 +231,14 @@ angular.module('dateParser', [])
                         }
 
                         i_val += ss.length;
+                    } else if (token === 'sss') {
+                        sss = dateParserHelpers.getInteger(val, i_val, 3, 3);
+
+                        if (sss === null || (sss < 0) || (sss > 999)) {
+                            throw 'Invalid milliseconds';
+                        }
+
+                        i_val += 3;
                     } else if (token == 'a') {
                         if (val.substring(i_val, i_val + 2).toLowerCase() == 'am') {
                             ampm = 'AM';
@@ -269,6 +281,7 @@ angular.module('dateParser', [])
                 hh = parseInt(hh);
                 mm = parseInt(mm);
                 ss = parseInt(ss);
+                sss = parseInt(sss);
 
                 // Is date valid for month?
                 if (month == 2) {
@@ -297,15 +310,15 @@ angular.module('dateParser', [])
                     hh -= 12;
                 }
 
-                var localDate = new Date(year, month - 1, date, hh, mm, ss);
+                var localDate = new Date(year, month - 1, date, hh, mm, ss, sss);
+
                 if (parsedZ) {
-                    return new Date(localDate.getTime() + (z + localDate.getTimezoneOffset()) * 60 * 1000);
-                } else {
-                    return localDate;
+                    return new Date(localDate.getTime() - (z + localDate.getTimezoneOffset()) * 60000);
                 }
+
+                return localDate;
             } catch(e) {
-                // TODO: Return undefined?
-                return new Date(undefined);
+                return undefined;
             }
         };
     }]);
