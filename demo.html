@@ -61,7 +61,7 @@
                         <input type="text" ng-model="date" date-parser="dd.MM.yyyy HH:mm" />
                     </div>
                 </p>
-                <p>Selected date: {{date | date:'MMM d, y h:m'}}</p>
+                <p>Selected date: {{date | date:'MMM d, y h:mm'}}</p>
 			</div>
             <h6>Code</h6>
             <div>
@@ -122,7 +122,7 @@
                         <input type="text" ng-model="date" date-parser="shortTime" />
                     </div>
                 </p>
-                <p>Selected date: {{date | date:'MMM d, y h:m'}}</p>
+                <p>Selected date: {{date | date:'MMM d, y h:mm'}}</p>
             </div>
             <h6>Code</h6>
             <div>
@@ -148,7 +148,7 @@
                     <span class="add-on">Date</span>
                     <input type="text" ng-model="date" date-parser="{{format}}" />
                 </div>
-                <p>Selected date: {{date | date:'MMM d, y h:m'}}</p>
+                <p>Selected date: {{date | date:'MMM d, y h:mm Z'}}</p>
             </div>
             <h6>Code</h6>
             <div ng-non-bindable>
@@ -156,7 +156,7 @@
             </div>
 		</div>
 
-		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.1/angular.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js"></script>
 		<script src="dateparser.js"></script>
         <script src="dateparser.directive.js"></script>
         <script>
