@@ -1,5 +1,5 @@
 /* 
- *   Angular DateParser 1.0.6
+ *   Angular DateParser 1.0.7
  *   https://github.com/dnasir/angular-dateParser
  *
  *   Copyright 2013, Dzulqarnain Nasir
@@ -11,7 +11,7 @@
 
 angular.module('dateParser', [])
     .factory('dateParserHelpers', [function() {
-        
+
         'use strict';
 
         return {
