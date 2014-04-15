@@ -6,7 +6,7 @@ A simple parser that converts date and time strings into JavaScript Date objects
 
 ## Prerequisites
 
-1. [Angular 1.0.1+](http://angularjs.org)
+1. [Angular 1.0.5+](http://angularjs.org)
 
 ## Usage
 
