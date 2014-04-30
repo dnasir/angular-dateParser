@@ -46,9 +46,9 @@ describe('dateParser', function() {
             var result4 = $dateParser(str4, format4);
             expect(result4.getHours()).toBe(4);
             expect(result4.getMinutes()).toBe(15);
-        }));
+        }));        
 
-        it('should properly parse timezones', inject(function($dateParser) {
+        it('should properly parse +hhmm timezones', inject(function($dateParser) {
             var str1 = 'December 17, 2013 12:59 +0300',
                 str2 = 'December 17, 2013 12:59 -0300';
 
@@ -60,6 +60,31 @@ describe('dateParser', function() {
 
             expect($dateParser(str1, format).getTime()).toBe(expected1.getTime());
             expect($dateParser(str2, format).getTime()).toBe(expected2.getTime());
+        }));
+		
+        it('should properly parse +hh:mm timezones', inject(function($dateParser) {
+            var str1 = 'December 17, 2013 12:59 +03:00',
+                str2 = 'December 17, 2013 12:59 -03:00';
+
+            var format = 'MMMM d, yyyy HH:mm Z';
+
+            var expectedBase = new Date(2013, 11, 17, 12, 59, 0),
+                expected1 = new Date(expectedBase.getTime() + (180 + expectedBase.getTimezoneOffset()) * 60 * 1000),
+                expected2 = new Date(expectedBase.getTime() + (-180 + expectedBase.getTimezoneOffset()) * 60 * 1000);
+
+            expect($dateParser(str1, format).getTime()).toBe(expected1.getTime());
+            expect($dateParser(str2, format).getTime()).toBe(expected2.getTime());
+        }));
+		
+        it('should properly parse UTC timezones', inject(function($dateParser) {
+            var str1 = 'December 17, 2013 12:59 Z';
+
+            var format = 'MMMM d, yyyy HH:mm Z';
+
+            var expectedBase = new Date(2013, 11, 17, 12, 59, 0),
+                expected1 = new Date(expectedBase.getTime() + (expectedBase.getTimezoneOffset()) * 60 * 1000);
+
+            expect($dateParser(str1, format).getTime()).toBe(expected1.getTime());
         }));
 
         it('should return Invalid Date for invalid date strings', inject(function($dateParser) {
