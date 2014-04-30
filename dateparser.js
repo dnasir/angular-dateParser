@@ -237,15 +237,29 @@ angular.module('dateParser', [])
 
                         i_val += 2;
                     } else if (token == 'Z') {
-                        var tzStr = val.substring(i_val, i_val + 5);
+                        if (val[i_val] === "Z") {
+                            z = 0;
 
-                        z = (parseInt(tzStr.substr(0, 3)) * 60) + parseInt(tzStr.substr(3, 2));
+                            i_val += 1;
+                        } else {
+                            if (val[i_val + 3] === ":") {
+                                var tzStr = val.substring(i_val, i_val + 6);
+
+                                z = (parseInt(tzStr.substr(0, 3)) * 60) + parseInt(tzStr.substr(4, 2));
+
+                                i_val += 6;
+                            } else {
+                                var tzStr = val.substring(i_val, i_val + 5);
+
+                                z = (parseInt(tzStr.substr(0, 3)) * 60) + parseInt(tzStr.substr(3, 2));
+
+                                i_val += 5;
+                            }
+                        }
 
                         if (z > 720 || z < -720) {
                             throw 'Invalid timezone';
                         }
-
-                        i_val += 5;
                     } else {
                         if (val.substring(i_val, i_val + token.length) != token) {
                             throw 'Pattern value mismatch';
