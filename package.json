@@ -1,0 +1,20 @@
+{
+  "author": "Dzulqarnain Nasir",
+  "name": "angular-dateParser",
+  "version": "1.0.7",
+  "homepage": "https://github.com/dnasir/angular-dateParser",
+  "licenses": {
+    "type": "MIT",
+    "url": "https://raw.github.com/joshdmiller/ng-boilerplate/master/LICENSE"
+  },
+  "bugs": "https://github.com/dnasir/angular-dateParser/issues",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:dnasir/angular-dateParser.git"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-karma": "~0.5.0"
+  }
+}
