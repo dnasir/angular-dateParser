@@ -1,5 +1,5 @@
 /* 
- *   Angular DateParser 1.0.7
+ *   Angular DateParser 1.0.8
  *   https://github.com/dnasir/angular-dateParser
  *
  *   Copyright 2013, Dzulqarnain Nasir
