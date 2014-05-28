@@ -60,7 +60,7 @@ describe('dateParser', function() {
             expect($dateParser(str7, format7)).toBe(undefined);
         }));
 
-        it('should properly parse timezones', inject(function($dateParser) {
+        it('should properly parse +hhmm timezones', inject(function($dateParser) {
             var str1 = 'December 17, 2013 12:59 +0300',
                 str2 = 'April 17, 2013 12:59 -0300',
                 str3 = 'December 17, 2013 12:59 +1300',
@@ -77,6 +77,35 @@ describe('dateParser', function() {
             expect($dateParser(str5, format).getUTCHours()).toBe(6);
             expect($dateParser(str6, format).getUTCHours()).toBe(4);
             expect($dateParser(str6, format).getUTCMinutes()).toBe(29);
+        }));
+
+        it('should properly parse +hh:mm timezones', inject(function($dateParser) {
+            var str1 = 'December 17, 2013 12:59 +03:00',
+                str2 = 'April 17, 2013 12:59 -03:00',
+                str3 = 'December 17, 2013 12:59 +13:00',
+                str4 = 'January 1, 2020 23:59 +12:00',
+                str5 = 'July 1, 2020 23:59 -07:00',
+                str6 = 'November 8, 1983 09:59 +05:30';
+
+            var format = 'MMMM d, yyyy HH:mm Z';
+
+            expect($dateParser(str1, format).getUTCHours()).toBe(9);
+            expect($dateParser(str2, format).getUTCHours()).toBe(15);
+            expect($dateParser(str3, format)).toBe(undefined);
+            expect($dateParser(str4, format).getUTCHours()).toBe(11);
+            expect($dateParser(str5, format).getUTCHours()).toBe(6);
+            expect($dateParser(str6, format).getUTCHours()).toBe(4);
+            expect($dateParser(str6, format).getUTCMinutes()).toBe(29);
+        }));
+
+        it('should properly parse UTC timezones', inject(function($dateParser) {
+            var str1 = 'December 17, 2013 12:59 Z',
+                str2 = 'April 17, 2013 23:59 Z';
+
+            var format = 'MMMM d, yyyy HH:mm Z';
+
+            expect($dateParser(str1, format).getUTCHours()).toBe(12);
+            expect($dateParser(str2, format).getUTCHours()).toBe(23);
         }));
 
         it('should return undefined for invalid date strings and pattern mismatches', inject(function($dateParser) {
