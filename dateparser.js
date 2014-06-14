@@ -1,5 +1,5 @@
 /* 
- *   Angular DateParser 1.0.8
+ *   Angular DateParser 1.0.9
  *   https://github.com/dnasir/angular-dateParser
  *
  *   Copyright 2013, Dzulqarnain Nasir
@@ -75,12 +75,13 @@ angular.module('dateParser', [])
                 }
 
                 // Initial values
-                var i_val = 0,
+                var now = new Date(),
+                    i_val = 0,
                     i_format = 0,
                     format_token = '',
-                    year = 1970,
-                    month = 1,
-                    date = 1,
+                    year = now.getFullYear(),
+                    month = now.getMonth() + 1,
+                    date = now.getDate(),
                     hh = 0,
                     mm = 0,
                     ss = 0,
