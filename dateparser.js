@@ -1,5 +1,5 @@
 /* 
- *   Angular DateParser 1.0.7
+ *   Angular DateParser 1.0.9
  *   https://github.com/dnasir/angular-dateParser
  *
  *   Copyright 2013, Dzulqarnain Nasir
@@ -75,12 +75,13 @@ angular.module('dateParser', [])
                 }
 
                 // Initial values
-                var i_val = 0,
+                var now = new Date(),
+                    i_val = 0,
                     i_format = 0,
                     format_token = '',
-                    year = 1970,
-                    month = 1,
-                    date = 1,
+                    year = now.getFullYear(),
+                    month = now.getMonth() + 1,
+                    date = now.getDate(),
                     hh = 0,
                     mm = 0,
                     ss = 0,
@@ -250,16 +251,31 @@ angular.module('dateParser', [])
 
                         i_val += 2;
                     } else if (token == 'Z') {
-                        var tzStr = val.substring(i_val, i_val + 5);
-
-                        z = (parseInt(tzStr.substr(0, 3)) * 60) + parseInt(tzStr.substr(3, 2));
                         parsedZ = true;
+
+                        if (val[i_val] === 'Z') {
+                            z = 0;
+
+                            i_val += 1;
+                        } else {
+                            if (val[i_val + 3] === ':') {
+                                var tzStr = val.substring(i_val, i_val + 6);
+
+                                z = (parseInt(tzStr.substr(0, 3)) * 60) + parseInt(tzStr.substr(4, 2));
+
+                                i_val += 6;
+                            } else {
+                                var tzStr = val.substring(i_val, i_val + 5);
+
+                                z = (parseInt(tzStr.substr(0, 3)) * 60) + parseInt(tzStr.substr(3, 2));
+
+                                i_val += 5;
+                            }
+                        }                        
 
                         if (z > 720 || z < -720) {
                             throw 'Invalid timezone';
                         }
-
-                        i_val += 5;
                     } else {
                         if (val.substring(i_val, i_val + token.length) != token) {
                             throw 'Pattern value mismatch';

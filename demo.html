@@ -70,7 +70,7 @@
                         <input type="text" ng-model="date" date-parser="dd.MM.yyyy HH:mm" />
                     </div>
                 </p>
-                <p>Selected date: {{date | date:'MMM d, y h:mm'}}</p>
+                <p>Selected date: {{date | date:'MMM d, y h:mm a'}}</p>
 			</div>
 
             <h6>Code</h6>
@@ -133,7 +133,7 @@
                         <input type="text" ng-model="date" date-parser="shortTime" />
                     </div>
                 </p>
-                <p>Selected date: {{date | date:'MMM d, y h:mm'}}</p>
+                <p>Selected date: {{date | date:'MMM d, y h:mm a'}}</p>
             </div>
 
             <h6>Code</h6>
@@ -161,7 +161,7 @@
                     <span class="add-on">Date</span>
                     <input type="text" ng-model="date" date-parser="{{format}}" />
                 </div>
-                <p>Selected date: {{date | date:'MMM d, y h:mm'}}</p>
+                <p>Selected date: {{date | date:'MMM d, y h:mm a'}}</p>
             </div>
 
             <h6>Code</h6>
@@ -177,7 +177,7 @@
                     <span class="add-on">Date</span>
                     <input type="text" ng-model="date" date-parser="dd/MM/yyyy HH:mm Z" />
                 </div>
-                <p>Selected date: {{date | date:'MMM d, y h:mm Z'}}</p>
+                <p>Selected date: {{date | date:'MMM d, y h:mm a Z'}}</p>
             </div>
             
             <h6>Code</h6>
