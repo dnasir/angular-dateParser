@@ -1,4 +1,4 @@
-/* 
+/*! 
  *   Angular DateParser 1.0.9
  *   https://github.com/dnasir/angular-dateParser
  *
