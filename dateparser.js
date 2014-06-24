@@ -261,13 +261,13 @@ angular.module('dateParser', [])
                             if (val[i_val + 3] === ':') {
                                 var tzStr = val.substring(i_val, i_val + 6);
 
-                                z = (parseInt(tzStr.substr(0, 3)) * 60) + parseInt(tzStr.substr(4, 2));
+                                z = (parseInt(tzStr.substr(0, 3), 10) * 60) + parseInt(tzStr.substr(4, 2), 10);
 
                                 i_val += 6;
                             } else {
                                 var tzStr = val.substring(i_val, i_val + 5);
 
-                                z = (parseInt(tzStr.substr(0, 3)) * 60) + parseInt(tzStr.substr(3, 2));
+                                z = (parseInt(tzStr.substr(0, 3), 10) * 60) + parseInt(tzStr.substr(3, 2), 10);
 
                                 i_val += 5;
                             }
@@ -291,13 +291,13 @@ angular.module('dateParser', [])
                 }
 
                 // Convert to integer
-                year = parseInt(year);
-                month = parseInt(month);
-                date = parseInt(date);
-                hh = parseInt(hh);
-                mm = parseInt(mm);
-                ss = parseInt(ss);
-                sss = parseInt(sss);
+                year = parseInt(year, 10);
+                month = parseInt(month, 10);
+                date = parseInt(date, 10);
+                hh = parseInt(hh, 10);
+                mm = parseInt(mm, 10);
+                ss = parseInt(ss, 10);
+                sss = parseInt(sss, 10);
 
                 // Is date valid for month?
                 if (month == 2) {
