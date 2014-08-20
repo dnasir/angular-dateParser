@@ -1,40 +1,35 @@
 angular.module('dateParserDirective', ['dateParser'])
-    .directive('dateParser', ['dateFilter', '$dateParser', function(dateFilter, $dateParser) {
-        return {
-            restrict: 'A',
-            require: 'ngModel',
-            link: function(scope, element, attrs, ngModel) {
-                var dateFormat;
-                
-                attrs.$observe('dateParser', function(value) {
-                    dateFormat = value;
-                    ngModel.$render();
-                });
+	.directive('dateParser', ['dateFilter', '$dateParser', function(dateFilter, $dateParser) {
+		return {
+			restrict: 'A',
+			require: 'ngModel',
+			link: function(scope, element, attrs, ngModel) {
+				var dateFormat;
 
-                var parseDate = function(viewValue) {
-                    var date = $dateParser(viewValue, dateFormat);
+				// If a new format is provided, update the view by rendering the model again.
+				attrs.$observe('dateParser', function(value) {
+					dateFormat = value;
+					// Leave the actual rendering to other directives. Angular provides these by default for <input>, <textarea> and <select>
+					ngModel.$render();
+				});
 
-                    if(isNaN(date)) {
-                        ngModel.$setValidity('date', false);
-                    } else {
-                        ngModel.$setValidity('date', true);
-                    }
+				// Parse the input value to a date
+				ngModel.$parsers.push(function(viewValue) {
+					var date = $dateParser(viewValue, dateFormat);
 
-                    return date;
-                };
-                ngModel.$parsers.unshift(parseDate);
+					if (isNaN(date)) {
+						ngModel.$setValidity('date', false);
+					} else {
+						ngModel.$setValidity('date', true);
+					}
 
-                ngModel.$render = function() {
-                    var date =  ngModel.$modelValue ? dateFilter(ngModel.$modelValue, dateFormat) : '';
-                    element.val(date);
-                    scope.ngModel = ngModel.$modelValue;
-                };
+					return date;
+				});
 
-                element.bind('input change keyup', function() {
-                    scope.$apply(function() {
-                        scope.ngModel = ngModel.$modelValue;
-                    });
-                });
-            }
-        };
-    }]);
+				// Format the new model value before it is displayed in the editor
+				ngModel.$formatters.push(function(modelValue) {
+					return modelValue ? dateFilter(modelValue, dateFormat) : '';
+				});
+			}
+		};
+	}]);
