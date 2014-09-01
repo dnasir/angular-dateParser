@@ -3,17 +3,6 @@ describe('dateParser', function() {
     beforeEach(module('dateParser'));
 
     describe('helper function test', function() {
-        it('should return true if value given is an integer', inject(function(dateParserHelpers) {
-            expect(dateParserHelpers.hasOnlyIntegers('123')).toBe(true);
-            expect(dateParserHelpers.hasOnlyIntegers('123.5')).toBe(false);
-            expect(dateParserHelpers.hasOnlyIntegers('abc')).toBe(false);
-            expect(dateParserHelpers.hasOnlyIntegers('12:')).toBe(false);
-            expect(dateParserHelpers.hasOnlyIntegers('012')).toBe(true);
-            expect(dateParserHelpers.hasOnlyIntegers('0:12')).toBe(false);
-            expect(dateParserHelpers.hasOnlyIntegers(null)).toBe(false);
-            expect(dateParserHelpers.hasOnlyIntegers(undefined)).toBe(false);
-        }));
-
         it('should return integers extracted from a string', inject(function(dateParserHelpers) {
             var string = '123 four five 678 nine ten';
 
