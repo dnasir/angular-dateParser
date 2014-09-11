@@ -14,31 +14,23 @@ angular.module('dateParser', [])
 
         'use strict';
 
+        var cache = {};
+
         return {
-
-            // Returns true if string contains only integers
-            hasOnlyIntegers: function(string) {
-                if(!string) return false;
-
-                var digits = '1234567890';
-
-                for (var i = 0; i < string.length; i++) {
-                    if (digits.indexOf(string.charAt(i)) == -1) return false;
-                }
-
-                return true;
-            },
-
             // Returns string value within a range if it's an integer
             getInteger: function(string, startPoint, minLength, maxLength) {
-                for (var i = maxLength; i >= minLength; i--) {
-                    var extracted = string.substring(startPoint, startPoint + i);
+              var val = string.substring(startPoint);
+              var matcher = cache[minLength + '_' + maxLength];
+              if (!matcher) {
+                  matcher = new RegExp('^(\\d{' + minLength + ',' + maxLength + '})');
+                  cache[minLength + '_' + maxLength] = matcher;
+              }
 
-                    if(this.hasOnlyIntegers(extracted)) {
-                        return extracted;
-                    }
-                }
-                return null;
+              var match = matcher.exec(val);
+              if (match) {
+                return match[1];
+              }
+              return null;
             }
         };
     }])
