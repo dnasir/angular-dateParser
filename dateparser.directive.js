@@ -11,7 +11,7 @@ angular.module('dateParserDirective', ['dateParser'])
                     ngModel.$render();
                 });
 
-                var parseDate = function(viewValue) {
+                ngModel.$parsers.unshift(function(viewValue) {
                     var date = $dateParser(viewValue, dateFormat);
 
                     if(isNaN(date)) {
@@ -21,20 +21,18 @@ angular.module('dateParserDirective', ['dateParser'])
                     }
 
                     return date;
-                };
-                ngModel.$parsers.unshift(parseDate);
+                });
 
+                // Make sure we render using our format on init
                 ngModel.$render = function() {
-                    var date =  ngModel.$modelValue ? dateFilter(ngModel.$modelValue, dateFormat) : '';
-                    element.val(date);
+                    element.val(ngModel.$modelValue ? dateFilter(ngModel.$modelValue, dateFormat) : undefined);
                     scope.ngModel = ngModel.$modelValue;
                 };
 
-                element.bind('input change keyup', function() {
-                    scope.$apply(function() {
-                        scope.ngModel = ngModel.$modelValue;
-                    });
-                });
+                // Format the new model value before it is displayed in the editor
+				ngModel.$formatters.push(function(modelValue) {
+					return modelValue ? dateFilter(modelValue, dateFormat) : '';
+				});
             }
         };
     }]);
