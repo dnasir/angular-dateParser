@@ -15,9 +15,11 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "1.8.2",
     "angular": "1.0.6",
-    "angular-mocks": "1.0.6",
     "angular-i18n": "1.0.6"
+  },
+  "devDependencies": {
+    "jquery": "1.8.2",
+    "angular-mocks": "1.0.6"
   }
 }
