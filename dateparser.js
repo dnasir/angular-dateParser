@@ -1,14 +1,3 @@
-/*! 
- *   Angular DateParser 1.0.9
- *   https://github.com/dnasir/angular-dateParser
- *
- *   Copyright 2013, Dzulqarnain Nasir
- *   http://www.dnasir.com
- *
- *   Licensed under the MIT license:
- *   http://www.opensource.org/licenses/MIT
- */
-
 angular.module('dateParser', [])
     .factory('dateParserHelpers', [function() {
 

@@ -1,7 +1,7 @@
-describe('dateParserDirective', function() {
+describe('dateParser directive', function() {
     var $scope, $compile;
 
-    beforeEach(module('dateParserDirective'));
+    beforeEach(module('dateParser'));
 
     beforeEach(inject(function(_$rootScope_, _$compile_) {
         $scope = _$rootScope_;

@@ -1,11 +1,11 @@
 {
   "author": "Dzulqarnain Nasir",
   "name": "angular-dateParser",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "homepage": "https://github.com/dnasir/angular-dateParser",
   "licenses": {
     "type": "MIT",
-    "url": "https://raw.github.com/joshdmiller/ng-boilerplate/master/LICENSE"
+    "url": "http://www.opensource.org/licenses/MIT"
   },
   "bugs": "https://github.com/dnasir/angular-dateParser/issues",
   "repository": {

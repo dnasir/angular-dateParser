@@ -1,5 +1,5 @@
-module.exports = function ( grunt ) {
-  
+module.exports = function (grunt) {
+
   grunt.loadNpmTasks('grunt-karma');
 
   var taskConfig = {
@@ -13,35 +13,42 @@ module.exports = function ( grunt ) {
         runnerPort: 9101,
         background: true
       },
-      continuous: {
+      single: {
         singleRun: true
       }
     },
 
     uglify: {
-      development: {
+      raw: {
         options: {
           beautify: true,
           sourceMap: false,
           mangle: false,
           compress: false,
-          preserveComments: 'some'
+          preserveComments: 'some',
+          banner: ['/*!', ' * <%= pkg.name %> <%= pkg.version %>', ' * <%= pkg.homepage %>', ' * Copyright <%= grunt.template.today("yyyy") %>, <%= pkg.author %>', ' * Licensed under: <%= pkg.licenses.type %> (<%= pkg.licenses.url %>)\n */\n\n'].join('\n'),
+          enclose: {
+            angular: 'angular'
+          }
         },
         files: {
-          'dist/angular-dateparser.js': ['dateparser.js']
+          'dist/angular-dateparser.js': ['dateparser.js', 'dateparser.directive.js']
         }
       },
-      production: {
+      prod: {
         options: {
           sourceMap: true,
           mangle: true,
           compress: {
             drop_console: true
           },
-          preserveComments: 'some'
+          preserveComments: false,
+          banner: '/*! <%= pkg.name %> <%= pkg.version %> | ' +
+            '(c) <%= grunt.template.today("yyyy") %>, <%= pkg.author %> | ' +
+            '<%= pkg.licenses.type %> (<%= pkg.licenses.url %>) */'
         },
         files: {
-          'dist/angular-dateparser.min.js': ['dateparser.js']
+          'dist/angular-dateparser.min.js': ['dist/angular-dateparser.js']
         }
       }
     },
@@ -54,6 +61,6 @@ module.exports = function ( grunt ) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-clean');
 
-  grunt.registerTask('default', ['karma:continuous']);
-  grunt.registerTask('build', ['karma:continuous', 'clean', 'uglify']);
+  grunt.registerTask('default', ['karma:single']);
+  grunt.registerTask('build', [ 'karma:single', 'clean', 'uglify']);
 };
