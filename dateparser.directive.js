@@ -1,3 +1,9 @@
+/*
+ * DateParser directive
+ * 
+ * Use this directive in form fields to implement the dateParser functionality.
+ */
+
 angular.module('dateParser')
     .directive('dateParser', ['dateFilter', '$dateParser', function(dateFilter, $dateParser) {
         
@@ -16,12 +22,9 @@ angular.module('dateParser')
 
                 ngModel.$parsers.unshift(function(viewValue) {
                     var date = $dateParser(viewValue, dateFormat);
-
-                    if(isNaN(date)) {
-                        ngModel.$setValidity('date', false);
-                    } else {
-                        ngModel.$setValidity('date', true);
-                    }
+                    
+                    // Set validity when view value changes
+                    ngModel.$setValidity('date', angular.isDate(date));
 
                     return date;
                 });
@@ -34,6 +37,10 @@ angular.module('dateParser')
 
                 // Format the new model value before it is displayed in the editor
 				ngModel.$formatters.push(function(modelValue) {
+                    
+                    // Set validity when model value changes
+                    ngModel.$setValidity('date', angular.isDate(modelValue));
+                    
 					return modelValue ? dateFilter(modelValue, dateFormat) : '';
 				});
             }
