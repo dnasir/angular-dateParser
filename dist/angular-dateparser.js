@@ -1,5 +1,5 @@
 /*!
- * angular-dateParser 1.0.11
+ * angular-dateParser 1.0.12
  * https://github.com/dnasir/angular-dateParser
  * Copyright 2014, Dzulqarnain Nasir
  * Licensed under: MIT (http://www.opensource.org/licenses/MIT)
@@ -243,11 +243,7 @@
                 });
                 ngModel.$parsers.unshift(function(viewValue) {
                     var date = $dateParser(viewValue, dateFormat);
-                    if (isNaN(date)) {
-                        ngModel.$setValidity("date", false);
-                    } else {
-                        ngModel.$setValidity("date", true);
-                    }
+                    ngModel.$setValidity("date", angular.isDate(date));
                     return date;
                 });
                 ngModel.$render = function() {
@@ -255,6 +251,7 @@
                     scope.ngModel = ngModel.$modelValue;
                 };
                 ngModel.$formatters.push(function(modelValue) {
+                    ngModel.$setValidity("date", angular.isDate(modelValue));
                     return modelValue ? dateFilter(modelValue, dateFormat) : "";
                 });
             }
