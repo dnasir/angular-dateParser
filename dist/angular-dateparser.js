@@ -7,6 +7,7 @@
 
 (function(angular) {
     angular.module("dateParser", []).factory("dateParserHelpers", [ function() {
+        "use strict";
         var cache = {};
         return {
             getInteger: function(string, startPoint, minLength, maxLength) {
@@ -24,6 +25,7 @@
             }
         };
     } ]).factory("$dateParser", [ "$locale", "dateParserHelpers", function($locale, dateParserHelpers) {
+        "use strict";
         var datetimeFormats = $locale.DATETIME_FORMATS;
         var monthNames = datetimeFormats.MONTH.concat(datetimeFormats.SHORTMONTH);
         var dayNames = datetimeFormats.DAY.concat(datetimeFormats.SHORTDAY);
@@ -228,7 +230,7 @@
             }
         };
     } ]);
-    angular.module("dateParser").directive("dateParser", [ "dateFilter", "$dateParser", function(dateFilter, $dateParser) {
+    angular.module("dateParserDirective", [ "dateParser" ]).directive("dateParser", [ "dateFilter", "$dateParser", function(dateFilter, $dateParser) {
         return {
             restrict: "A",
             require: "ngModel",

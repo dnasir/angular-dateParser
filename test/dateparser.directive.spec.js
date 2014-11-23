@@ -2,6 +2,7 @@ describe('dateParser directive', function() {
     var $scope, $compile;
 
     beforeEach(module('dateParser'));
+    beforeEach(module('dateParserDirective'));
 
     beforeEach(inject(function(_$rootScope_, _$compile_) {
         $scope = _$rootScope_;
@@ -26,7 +27,7 @@ describe('dateParser directive', function() {
 
             changeInputValueTo = function (el, value) {
                 el.val(value);
-                el.trigger($sniffer.hasEvent('input') ? 'input' : 'change');
+                el.triggerHandler($sniffer.hasEvent('input') ? 'input' : 'change');
                 $scope.$digest();
             };
         }));
