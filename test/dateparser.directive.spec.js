@@ -26,7 +26,7 @@ describe('dateParser directive', function() {
 
             changeInputValueTo = function (el, value) {
                 el.val(value);
-                el.trigger($sniffer.hasEvent('input') ? 'input' : 'change');
+                el.triggerHandler($sniffer.hasEvent('input') ? 'input' : 'change');
                 $scope.$digest();
             };
         }));

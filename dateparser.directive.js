@@ -1,5 +1,8 @@
-angular.module('dateParserDirective', ['dateParser'])
+angular.module('dateParser')
     .directive('dateParser', ['dateFilter', '$dateParser', function(dateFilter, $dateParser) {
+        
+        'use strict';
+        
         return {
             restrict: 'A',
             require: 'ngModel',

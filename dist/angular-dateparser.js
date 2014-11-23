@@ -1,5 +1,5 @@
 /*!
- * angular-dateParser 1.0.10
+ * angular-dateParser 1.0.11
  * https://github.com/dnasir/angular-dateParser
  * Copyright 2014, Dzulqarnain Nasir
  * Licensed under: MIT (http://www.opensource.org/licenses/MIT)
@@ -7,6 +7,7 @@
 
 (function(angular) {
     angular.module("dateParser", []).factory("dateParserHelpers", [ function() {
+        "use strict";
         var cache = {};
         return {
             getInteger: function(string, startPoint, minLength, maxLength) {
@@ -24,6 +25,7 @@
             }
         };
     } ]).factory("$dateParser", [ "$locale", "dateParserHelpers", function($locale, dateParserHelpers) {
+        "use strict";
         var datetimeFormats = $locale.DATETIME_FORMATS;
         var monthNames = datetimeFormats.MONTH.concat(datetimeFormats.SHORTMONTH);
         var dayNames = datetimeFormats.DAY.concat(datetimeFormats.SHORTDAY);
@@ -229,6 +231,7 @@
         };
     } ]);
     angular.module("dateParser").directive("dateParser", [ "dateFilter", "$dateParser", function(dateFilter, $dateParser) {
+        "use strict";
         return {
             restrict: "A",
             require: "ngModel",
