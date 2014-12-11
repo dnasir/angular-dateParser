@@ -42,19 +42,47 @@ describe('dateParser directive', function() {
             expect($scope.datetime).toEqual(new Date(2013, 11, 23, 0, 0, 0));
             expect($scope.testForm.$valid).toEqual(true);
         });
-        
+
         it('should change the view value when model value is changed', function() {
             $scope.datetime = new Date(2014, 11, 23, 21, 50, 0);
             $scope.$digest();
-            
+
             expect(inputEl.val()).toEqual('23.12.2014');
             expect($scope.testForm.$valid).toEqual(true);
         });
-        
+
         it('should set validity as invalid when an invalid value is entered', function() {
             changeInputValueTo(inputEl, 'something completely invalid');
-            
+
             expect($scope.testForm.$valid).toEqual(false);
+        });
+
+        it('should set validity when ng-required is present', function() {
+            var wrapElement = $compile(angular.element('<div ng-form name="testForm"><input type="text" ng-model="datetime" date-parser="{{dateFormat}}" ng-required="true" /></div>'))($scope);
+            $scope.$digest();
+
+            assignElements(wrapElement);
+
+            changeInputValueTo(inputEl, '');
+
+            expect($scope.testForm.$valid).toBeFalsy();
+            expect($scope.testForm.$error.date).toBeFalsy();
+
+            changeInputValueTo(inputEl, 'something invalid');
+
+            expect($scope.testForm.$valid).toBeFalsy();
+            expect($scope.testForm.$error.date).toBeTruthy();
+
+            changeInputValueTo(inputEl, '23.12.2013');
+
+            expect($scope.testForm.$valid).toBeTruthy();
+            expect($scope.testForm.$error.date).toBeFalsy();
+
+            $scope.datetime = null;
+            $scope.$digest();
+
+            expect($scope.testForm.$valid).toBeFalsy();
+            expect($scope.testForm.$error.date).toBeFalsy();
         });
     });
 });
