@@ -1,6 +1,9 @@
 {
   "name": "angular-dateParser",
   "version": "1.0.13",
+  "main": [
+    "./dist/angular-dateparser.js"
+  ],
   "homepage": "https://github.com/dnasir/angular-dateParser",
   "authors": [
     "Dzulqarnain Nasir"
@@ -11,8 +14,7 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "test",
-    "tests"
+    "test"
   ],
   "dependencies": {
     "angular": "1.x",
