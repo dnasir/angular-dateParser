@@ -30,7 +30,8 @@ angular.module('dateParser')
                 });
 
                 ngModel.$render = function() {
-                    element.val(ngModel.$modelValue ? dateFilter(ngModel.$modelValue, dateFormat) : undefined);
+                    var modelValueExists = ngModel.$modelValue === '' || ngModel.$modelValue === null || ngModel.$modelValue;
+                    element.val(modelValueExists ? dateFilter(ngModel.$modelValue, dateFormat) : undefined);
                     scope.ngModel = ngModel.$modelValue;
                 };
 
