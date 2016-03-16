@@ -51,6 +51,34 @@ describe('dateParser directive', function() {
             expect($scope.testForm.$valid).toEqual(true);
         });
 
+        it('should reset the view value when model value is changed to null', function() {
+            $scope.datetime = new Date(2014, 11, 23, 21, 50, 0);
+            $scope.$digest();
+
+            expect(inputEl.val()).toEqual('23.12.2014');
+            expect($scope.testForm.$valid).toEqual(true);
+
+            $scope.datetime = null;
+            $scope.$digest();
+
+            expect(inputEl.val()).toEqual('');
+            expect($scope.testForm.$valid).toEqual(true);
+        });
+
+        it('should reset the view value when model value is changed to empty', function() {
+            $scope.datetime = new Date(2014, 11, 23, 21, 50, 0);
+            $scope.$digest();
+
+            expect(inputEl.val()).toEqual('23.12.2014');
+            expect($scope.testForm.$valid).toEqual(true);
+
+            $scope.datetime = '';
+            $scope.$digest();
+
+            expect(inputEl.val()).toEqual('');
+            expect($scope.testForm.$valid).toEqual(true);
+        });
+
         it('should set validity as invalid when an invalid value is entered', function() {
             changeInputValueTo(inputEl, 'something completely invalid');
 
