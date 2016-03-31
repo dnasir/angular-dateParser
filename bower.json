@@ -4,7 +4,7 @@
   "main": [
     "./dist/angular-dateparser.js",
     "./dist/angular-dateparser.min.js",
-    "./dist/angular-dateparser.min.js.map",
+    "./dist/angular-dateparser.min.js.map"
   ],
   "homepage": "https://github.com/dnasir/angular-dateParser",
   "authors": [
