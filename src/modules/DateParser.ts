@@ -2,10 +2,10 @@
 
 module NgDateParser {
     export interface IDateParser {
-        parse(val:any, format?: string): Date;
+        (val:any, format?: string): Date;
     }
     
-    class DateParser implements IDateParser {
+    class DateParser {
         'use strict';
 
         private datetimeFormats: ng.ILocaleDateTimeFormatDescriptor;
@@ -25,7 +25,7 @@ module NgDateParser {
             this.cache = [];
         }
         
-        parse(val:any, format?: string): Date {
+        private parse: IDateParser = (val:any, format?: string): Date => {
             // if it's a Date object, return as-is
             if (angular.isDate(val)) {
                 return val;
@@ -318,14 +318,17 @@ module NgDateParser {
             }
             return null;
         }
+        
+        static factory(): Function {
+            let factory = ($locale: ng.ILocaleService) => {
+                let instance = new DateParser($locale);
+                return (val, format) => instance.parse(val, format);
+            }
+            factory.$inject = ['$locale'];
+            return factory;
+        }
     }
     
     angular.module('dateParser', [])
-        .factory('$dateParser', ['$locale', ($locale) => {
-            var instance = new DateParser($locale);
-            
-            return function(val, format) {
-                return instance.parse(val, format);
-            };
-        }])
+        .factory('$dateParser', DateParser.factory());
 }

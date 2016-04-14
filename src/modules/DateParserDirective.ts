@@ -10,7 +10,7 @@ module NgDateParser {
             ngModel: '='
         };
         
-        constructor(private dateFilter, private $dateParser) { }
+        constructor(private dateFilter, private $dateParser: IDateParser) { }
 
         link: ng.IDirectiveLinkFn = ($scope: ng.IScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes, ngModel: any) => {
             let dateFormat: string;
