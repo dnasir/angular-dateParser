@@ -2,16 +2,6 @@ describe('dateParser', function() {
 
     beforeEach(module('dateParser'));
 
-    describe('helper function test', function() {
-        it('should return integers extracted from a string', inject(function(dateParserHelpers) {
-            var testString = '123 four five 678 nine ten';
-
-            expect(dateParserHelpers.getInteger(testString, 0, 1, 3)).toBe(123);
-            expect(dateParserHelpers.getInteger(testString, 3, 1, 3)).toBe(null);
-            expect(dateParserHelpers.getInteger(testString, 14, 1, 2)).toBe(67);
-        }));
-    });
-
     describe('manual formats', function() {
         it('should convert string to Date object using provided formats', inject(function($dateParser) {
             var str1 = '17.12.2013',

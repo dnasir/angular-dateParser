@@ -11,17 +11,18 @@ module NgDateParser {
         private datetimeFormats: ng.ILocaleDateTimeFormatDescriptor;
         private monthNames: string[];
         private dayNames: string[];
+        private cache: string[];
 
-        constructor(
-            private $locale: ng.ILocaleService,
-            private dateParserHelpers: IDateParserHelpers
-        ) {
+        constructor(private $locale: ng.ILocaleService) {
             // Fetch date and time formats from $locale service
             this.datetimeFormats = this.$locale.DATETIME_FORMATS;
 
             // Build array of month and day names
             this.monthNames = this.datetimeFormats.MONTH.concat(this.datetimeFormats.SHORTMONTH);
             this.dayNames = this.datetimeFormats.DAY.concat(this.datetimeFormats.SHORTDAY);
+            
+            // Regex pattern cache
+            this.cache = [];
         }
         
         parse(val:any, format?: string): Date {
@@ -111,7 +112,7 @@ module NgDateParser {
                             maxLength = 4;
                         }
 
-                        year = this.dateParserHelpers.getInteger(val, i_val, minLength, maxLength);
+                        year = this.getInteger(val, i_val, minLength, maxLength);
 
                         if (year === null) {
                             throw 'Invalid year';
@@ -157,7 +158,7 @@ module NgDateParser {
                             }
                         }
                     } else if (token === 'MM' || token === 'M') {
-                        month = this.dateParserHelpers.getInteger(val, i_val, token.length, 2);
+                        month = this.getInteger(val, i_val, token.length, 2);
 
                         if (month === null || (month < 1) || (month > 12)) {
                             throw 'Invalid month';
@@ -165,7 +166,7 @@ module NgDateParser {
 
                         i_val += Math.max(month.toString().length, token.length);
                     } else if (token === 'dd' || token === 'd') {
-                        date = this.dateParserHelpers.getInteger(val, i_val, token.length, 2);
+                        date = this.getInteger(val, i_val, token.length, 2);
 
                         if (date === null || (date < 1) || (date > 31)) {
                             throw 'Invalid date';
@@ -173,7 +174,7 @@ module NgDateParser {
 
                         i_val += Math.max(date.toString().length, token.length);
                     } else if (token === 'HH' || token === 'H') {
-                        hh = this.dateParserHelpers.getInteger(val, i_val, token.length, 2);
+                        hh = this.getInteger(val, i_val, token.length, 2);
 
                         if (hh === null || (hh < 0) || (hh > 23)) {
                             throw 'Invalid hours';
@@ -181,7 +182,7 @@ module NgDateParser {
 
                         i_val += Math.max(hh.toString().length, token.length);
                     } else if (token === 'hh' || token === 'h') {
-                        hh = this.dateParserHelpers.getInteger(val, i_val, token.length, 2);
+                        hh = this.getInteger(val, i_val, token.length, 2);
 
                         if (hh === null || (hh < 1) || (hh > 12)) {
                             throw 'Invalid hours';
@@ -189,7 +190,7 @@ module NgDateParser {
 
                         i_val += Math.max(hh.toString().length, token.length);
                     } else if (token === 'mm' || token === 'm') {
-                        mm = this.dateParserHelpers.getInteger(val, i_val, token.length, 2);
+                        mm = this.getInteger(val, i_val, token.length, 2);
 
                         if (mm === null || (mm < 0) || (mm > 59)) {
                             throw 'Invalid minutes';
@@ -197,7 +198,7 @@ module NgDateParser {
 
                         i_val += Math.max(mm.toString().length, token.length);
                     } else if (token === 'ss' || token === 's') {
-                        ss = this.dateParserHelpers.getInteger(val, i_val, token.length, 2);
+                        ss = this.getInteger(val, i_val, token.length, 2);
 
                         if (ss === null || (ss < 0) || (ss > 59)) {
                             throw 'Invalid seconds';
@@ -205,7 +206,7 @@ module NgDateParser {
 
                         i_val += Math.max(ss.toString().length, token.length);
                     } else if (token === 'sss') {
-                        sss = this.dateParserHelpers.getInteger(val, i_val, 3, 3);
+                        sss = this.getInteger(val, i_val, 3, 3);
 
                         if (sss === null || (sss < 0) || (sss > 999)) {
                             throw 'Invalid milliseconds';
@@ -300,6 +301,22 @@ module NgDateParser {
                 // do we need to log the error somewhere?
                 return undefined;
             }
+        }
+        
+        private getInteger(input: string, startPoint: number, minLength: number, maxLength: number): number {
+            var val = input.substring(startPoint);
+            var key = `${minLength}_${maxLength}`;
+            var matcher = this.cache[key];
+            if (!matcher) {
+                matcher = new RegExp(`^(\\d{${minLength},${maxLength}})`);
+                this.cache[key] = matcher;
+            }
+
+            var match = matcher.exec(val);
+            if (match) {
+                return Number(match[1]);
+            }
+            return null;
         }
     }
 }

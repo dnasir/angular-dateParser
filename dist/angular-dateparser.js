@@ -8,12 +8,12 @@
 var NgDateParser;
 (function (NgDateParser) {
     var DateParser = (function () {
-        function DateParser($locale, dateParserHelpers) {
+        function DateParser($locale) {
             this.$locale = $locale;
-            this.dateParserHelpers = dateParserHelpers;
             this.datetimeFormats = this.$locale.DATETIME_FORMATS;
             this.monthNames = this.datetimeFormats.MONTH.concat(this.datetimeFormats.SHORTMONTH);
             this.dayNames = this.datetimeFormats.DAY.concat(this.datetimeFormats.SHORTDAY);
+            this.cache = [];
         }
         DateParser.prototype.parse = function (val, format) {
             if (angular.isDate(val)) {
@@ -62,7 +62,7 @@ var NgDateParser;
                             minLength = 2;
                             maxLength = 4;
                         }
-                        year = this.dateParserHelpers.getInteger(val, i_val, minLength, maxLength);
+                        year = this.getInteger(val, i_val, minLength, maxLength);
                         if (year === null) {
                             throw 'Invalid year';
                         }
@@ -103,49 +103,49 @@ var NgDateParser;
                         }
                     }
                     else if (token === 'MM' || token === 'M') {
-                        month = this.dateParserHelpers.getInteger(val, i_val, token.length, 2);
+                        month = this.getInteger(val, i_val, token.length, 2);
                         if (month === null || (month < 1) || (month > 12)) {
                             throw 'Invalid month';
                         }
                         i_val += Math.max(month.toString().length, token.length);
                     }
                     else if (token === 'dd' || token === 'd') {
-                        date = this.dateParserHelpers.getInteger(val, i_val, token.length, 2);
+                        date = this.getInteger(val, i_val, token.length, 2);
                         if (date === null || (date < 1) || (date > 31)) {
                             throw 'Invalid date';
                         }
                         i_val += Math.max(date.toString().length, token.length);
                     }
                     else if (token === 'HH' || token === 'H') {
-                        hh = this.dateParserHelpers.getInteger(val, i_val, token.length, 2);
+                        hh = this.getInteger(val, i_val, token.length, 2);
                         if (hh === null || (hh < 0) || (hh > 23)) {
                             throw 'Invalid hours';
                         }
                         i_val += Math.max(hh.toString().length, token.length);
                     }
                     else if (token === 'hh' || token === 'h') {
-                        hh = this.dateParserHelpers.getInteger(val, i_val, token.length, 2);
+                        hh = this.getInteger(val, i_val, token.length, 2);
                         if (hh === null || (hh < 1) || (hh > 12)) {
                             throw 'Invalid hours';
                         }
                         i_val += Math.max(hh.toString().length, token.length);
                     }
                     else if (token === 'mm' || token === 'm') {
-                        mm = this.dateParserHelpers.getInteger(val, i_val, token.length, 2);
+                        mm = this.getInteger(val, i_val, token.length, 2);
                         if (mm === null || (mm < 0) || (mm > 59)) {
                             throw 'Invalid minutes';
                         }
                         i_val += Math.max(mm.toString().length, token.length);
                     }
                     else if (token === 'ss' || token === 's') {
-                        ss = this.dateParserHelpers.getInteger(val, i_val, token.length, 2);
+                        ss = this.getInteger(val, i_val, token.length, 2);
                         if (ss === null || (ss < 0) || (ss > 59)) {
                             throw 'Invalid seconds';
                         }
                         i_val += Math.max(ss.toString().length, token.length);
                     }
                     else if (token === 'sss') {
-                        sss = this.dateParserHelpers.getInteger(val, i_val, 3, 3);
+                        sss = this.getInteger(val, i_val, 3, 3);
                         if (sss === null || (sss < 0) || (sss > 999)) {
                             throw 'Invalid milliseconds';
                         }
@@ -230,17 +230,7 @@ var NgDateParser;
                 return undefined;
             }
         };
-        return DateParser;
-    }());
-    NgDateParser.DateParser = DateParser;
-})(NgDateParser || (NgDateParser = {}));
-var NgDateParser;
-(function (NgDateParser) {
-    var DateParserHelpers = (function () {
-        function DateParserHelpers() {
-            this.cache = [];
-        }
-        DateParserHelpers.prototype.getInteger = function (input, startPoint, minLength, maxLength) {
+        DateParser.prototype.getInteger = function (input, startPoint, minLength, maxLength) {
             var val = input.substring(startPoint);
             var key = minLength + "_" + maxLength;
             var matcher = this.cache[key];
@@ -254,17 +244,15 @@ var NgDateParser;
             }
             return null;
         };
-        return DateParserHelpers;
+        return DateParser;
     }());
-    NgDateParser.DateParserHelpers = DateParserHelpers;
+    NgDateParser.DateParser = DateParser;
 })(NgDateParser || (NgDateParser = {}));
 var NgDateParser;
 (function (NgDateParser) {
-    'use strict';
     angular.module('dateParser', [])
-        .service('dateParserHelpers', NgDateParser.DateParserHelpers)
-        .factory('$dateParser', ['$locale', 'dateParserHelpers', function ($locale, dateParserHelpers) {
-            var instance = new NgDateParser.DateParser($locale, dateParserHelpers);
+        .factory('$dateParser', ['$locale', function ($locale) {
+            var instance = new NgDateParser.DateParser($locale);
             return function (val, format) {
                 return instance.parse(val, format);
             };
