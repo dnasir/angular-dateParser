@@ -69,26 +69,7 @@ gulp.task("build:minified", function() {
         .pipe(gulp.dest(outputPath))
 });
 
-gulp.task("build:directive", function() {
-    return gulp.src("src/dateparser.directive.js")
-        .pipe(rename("angular-dateparser-directive.js"))
-        .pipe(strip())
-        .pipe(header(banner, { pkg: pkg }))
-        .pipe(gulp.dest(outputPath));
-});
-
-gulp.task("build:directive-minified", function() {
-    return gulp.src("src/dateparser.directive.js")
-        .pipe(rename("angular-dateparser-directive.min.js"))
-        .pipe(strip())
-        .pipe(uglify({
-            mangle: false
-        }))
-        .pipe(header(banner, { pkg: pkg }))
-        .pipe(gulp.dest(outputPath));
-});
-
-gulp.task("build", ["clean", "build:standard", "build:minified", "build:directive", "build:directive-minified"]);
+gulp.task("build", ["clean", "build:standard", "build:minified"]);
 
 gulp.task("watch", ["build"], function() {
     return gulp.watch("src/**/*.ts", ["build", "test"]);

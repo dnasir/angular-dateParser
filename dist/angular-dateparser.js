@@ -246,17 +246,57 @@ var NgDateParser;
         };
         return DateParser;
     }());
-    NgDateParser.DateParser = DateParser;
-})(NgDateParser || (NgDateParser = {}));
-var NgDateParser;
-(function (NgDateParser) {
     angular.module('dateParser', [])
         .factory('$dateParser', ['$locale', function ($locale) {
-            var instance = new NgDateParser.DateParser($locale);
+            var instance = new DateParser($locale);
             return function (val, format) {
                 return instance.parse(val, format);
             };
         }]);
+})(NgDateParser || (NgDateParser = {}));
+var NgDateParser;
+(function (NgDateParser) {
+    var DateParserDirective = (function () {
+        function DateParserDirective(dateFilter, $dateParser) {
+            var _this = this;
+            this.dateFilter = dateFilter;
+            this.$dateParser = $dateParser;
+            this.restrict = 'A';
+            this.require = 'ngModel';
+            this.scope = {
+                ngModel: '='
+            };
+            this.link = function ($scope, element, attrs, ngModel) {
+                var dateFormat;
+                attrs.$observe('dateParser', function (value) {
+                    dateFormat = value;
+                    ngModel.$render();
+                });
+                ngModel.$parsers.unshift(function (viewValue) {
+                    var date = _this.$dateParser(viewValue, dateFormat);
+                    ngModel.$setValidity('date', !viewValue || angular.isDate(date));
+                    return date;
+                });
+                ngModel.$render = function () {
+                    var modelValueExists = ngModel.$modelValue === '' || ngModel.$modelValue === null || ngModel.$modelValue;
+                    element.val(modelValueExists ? _this.dateFilter(ngModel.$modelValue, dateFormat) : undefined);
+                    _this.scope.ngModel = ngModel.$modelValue;
+                };
+                ngModel.$formatters.push(function (modelValue) {
+                    ngModel.$setValidity('date', !modelValue || angular.isDate(modelValue));
+                    return angular.isDate(modelValue) ? _this.dateFilter(modelValue, dateFormat) : '';
+                });
+            };
+        }
+        DateParserDirective.factory = function () {
+            var directive = function (dateFilter, $dateParser) { return new DateParserDirective(dateFilter, $dateParser); };
+            directive.$inject = ['dateFilter', '$dateParser'];
+            return directive;
+        };
+        return DateParserDirective;
+    }());
+    angular.module('dateParser')
+        .directive('dateParser', DateParserDirective.factory());
 })(NgDateParser || (NgDateParser = {}));
 
 //# sourceMappingURL=angular-dateparser.js.map

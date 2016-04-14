@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="dateParser">
+<html ng-app="demoApp">
 	<head>
 		<meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -193,14 +193,14 @@
             </div>
         </footer>
 
-		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
 		<script src="dist/angular-dateparser.min.js"></script>
-        <script src="dist/angular-dateparser-directive.min.js"></script>
         <script>
-            function controller($scope) {
-                $scope.format = 'dd.MM.yyyy';
-                $scope.date = new Date();
-            }
+            angular.module('demoApp', ['dateParser'])
+                .controller('controller', function($scope){
+                    $scope.format = 'dd.MM.yyyy';
+                    $scope.date = new Date();
+                });
         </script>
 
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shCore.js"></script>

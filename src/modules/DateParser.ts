@@ -5,7 +5,7 @@ module NgDateParser {
         parse(val:any, format?: string): Date;
     }
     
-    export class DateParser implements IDateParser {
+    class DateParser implements IDateParser {
         'use strict';
 
         private datetimeFormats: ng.ILocaleDateTimeFormatDescriptor;
@@ -319,4 +319,13 @@ module NgDateParser {
             return null;
         }
     }
+    
+    angular.module('dateParser', [])
+        .factory('$dateParser', ['$locale', ($locale) => {
+            var instance = new DateParser($locale);
+            
+            return function(val, format) {
+                return instance.parse(val, format);
+            };
+        }])
 }
