@@ -4,11 +4,11 @@ describe('dateParser', function() {
 
     describe('helper function test', function() {
         it('should return integers extracted from a string', inject(function(dateParserHelpers) {
-            var string = '123 four five 678 nine ten';
+            var testString = '123 four five 678 nine ten';
 
-            expect(dateParserHelpers.getInteger(string, 0, 1, 3)).toBe('123');
-            expect(dateParserHelpers.getInteger(string, 3, 1, 3)).toBe(null);
-            expect(dateParserHelpers.getInteger(string, 14, 1, 2)).toBe('67');
+            expect(dateParserHelpers.getInteger(testString, 0, 1, 3)).toBe(123);
+            expect(dateParserHelpers.getInteger(testString, 3, 1, 3)).toBe(null);
+            expect(dateParserHelpers.getInteger(testString, 14, 1, 2)).toBe(67);
         }));
     });
 
