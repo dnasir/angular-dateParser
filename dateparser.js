@@ -27,14 +27,29 @@ angular.module('dateParser', [])
 
         'use strict';
 
-        // Fetch date and time formats from $locale service
-        var datetimeFormats = $locale.DATETIME_FORMATS;
+        var localeId;
+        var datetimeFormats;
+        var monthNames;
+        var dayNames;
 
-        // Build array of month and day names
-        var monthNames = datetimeFormats.MONTH.concat(datetimeFormats.SHORTMONTH);
-        var dayNames = datetimeFormats.DAY.concat(datetimeFormats.SHORTDAY);
+        function init() {
+            localeId = $locale.id;
+
+            // Fetch date and time formats from $locale service
+            datetimeFormats = $locale.DATETIME_FORMATS;
+
+            // Build array of month and day names
+            monthNames = datetimeFormats.MONTH.concat(datetimeFormats.SHORTMONTH);
+            dayNames = datetimeFormats.DAY.concat(datetimeFormats.SHORTDAY);
+        }
+
+        init();
 
         return function(val, format) {
+
+            if ($locale.id !== localeId) {
+                init();
+            }
 
             // If input is a Date object, there's no need to process it
             if(angular.isDate(val)) {
