@@ -8,9 +8,18 @@
 var NgDateParser;
 (function (NgDateParser) {
     var DateParser = (function () {
-        function DateParser($locale) {
+        function DateParser() {
             var _this = this;
-            this.$locale = $locale;
+            this.$get = function ($locale, $rootScope) {
+                _this.$locale = $locale;
+                _this.updateFromLocale();
+                if (_this._watchLocale) {
+                    $rootScope.$watchCollection(function () { return $locale; }, function () {
+                        _this.updateFromLocale();
+                    });
+                }
+                return _this.parse;
+            };
             this.parse = function (val, format) {
                 if (angular.isDate(val)) {
                     return val;
@@ -226,11 +235,23 @@ var NgDateParser;
                     return undefined;
                 }
             };
+            this.cache = [];
+            this._watchLocale = false;
+            this.$get.$inject = ['$locale', '$rootScope'];
+        }
+        DateParser.prototype.updateFromLocale = function () {
             this.datetimeFormats = this.$locale.DATETIME_FORMATS;
             this.monthNames = this.datetimeFormats.MONTH.concat(this.datetimeFormats.SHORTMONTH);
             this.dayNames = this.datetimeFormats.DAY.concat(this.datetimeFormats.SHORTDAY);
-            this.cache = [];
-        }
+        };
+        DateParser.prototype.watchLocale = function (watch) {
+            if (angular.isDefined(watch)) {
+                this._watchLocale = watch;
+            }
+            else {
+                return this._watchLocale;
+            }
+        };
         DateParser.prototype.getInteger = function (input, startPoint, minLength, maxLength) {
             var val = input.substring(startPoint);
             var key = minLength + "_" + maxLength;
@@ -245,18 +266,10 @@ var NgDateParser;
             }
             return null;
         };
-        DateParser.factory = function () {
-            var factory = function ($locale) {
-                var instance = new DateParser($locale);
-                return function (val, format) { return instance.parse(val, format); };
-            };
-            factory.$inject = ['$locale'];
-            return factory;
-        };
         return DateParser;
     }());
     angular.module('dateParser', [])
-        .factory('$dateParser', DateParser.factory());
+        .provider('$dateParser', DateParser);
 })(NgDateParser || (NgDateParser = {}));
 var NgDateParser;
 (function (NgDateParser) {

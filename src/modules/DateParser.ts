@@ -5,24 +5,49 @@ module NgDateParser {
         (val:any, format?: string): Date;
     }
     
-    class DateParser {
+    class DateParser implements ng.IServiceProvider {
         'use strict';
-
+        
+        private $locale: ng.ILocaleService;
         private datetimeFormats: ng.ILocaleDateTimeFormatDescriptor;
         private monthNames: string[];
         private dayNames: string[];
         private cache: string[];
+        private _watchLocale: boolean;
 
-        constructor(private $locale: ng.ILocaleService) {
-            // Fetch date and time formats from $locale service
-            this.datetimeFormats = this.$locale.DATETIME_FORMATS;
-
-            // Build array of month and day names
-            this.monthNames = this.datetimeFormats.MONTH.concat(this.datetimeFormats.SHORTMONTH);
-            this.dayNames = this.datetimeFormats.DAY.concat(this.datetimeFormats.SHORTDAY);
-            
+        constructor() {
             // Regex pattern cache
             this.cache = [];
+            this._watchLocale = false;
+            this.$get.$inject = ['$locale', '$rootScope'];
+        }
+        
+        updateFromLocale() {
+            this.datetimeFormats = this.$locale.DATETIME_FORMATS;
+            this.monthNames = this.datetimeFormats.MONTH.concat(this.datetimeFormats.SHORTMONTH);
+            this.dayNames = this.datetimeFormats.DAY.concat(this.datetimeFormats.SHORTDAY);
+        }
+        
+        watchLocale(watch?: boolean) {
+            if(angular.isDefined(watch)){
+                this._watchLocale = watch;
+            } else {
+                return this._watchLocale;
+            }
+        }
+        
+        $get = ($locale: ng.ILocaleService, $rootScope: ng.IRootScopeService) => {
+            this.$locale = $locale;
+            
+            this.updateFromLocale();
+            
+            if(this._watchLocale) {
+                $rootScope.$watchCollection(() => $locale, () => {
+                    this.updateFromLocale();
+                });
+            }
+            
+            return this.parse;
         }
         
         private parse: IDateParser = (val:any, format?: string): Date => {
@@ -319,16 +344,16 @@ module NgDateParser {
             return null;
         }
         
-        static factory(): Function {
-            let factory = ($locale: ng.ILocaleService) => {
-                let instance = new DateParser($locale);
-                return (val, format) => instance.parse(val, format);
-            }
-            factory.$inject = ['$locale'];
-            return factory;
-        }
+        // static factory(): Function {
+        //     let factory = ($locale: ng.ILocaleService) => {
+        //         let instance = new DateParser($locale);
+        //         return (val, format) => instance.parse(val, format);
+        //     }
+        //     factory.$inject = ['$locale'];
+        //     return factory;
+        // }
     }
     
     angular.module('dateParser', [])
-        .factory('$dateParser', DateParser.factory());
+        .provider('$dateParser', DateParser);
 }
