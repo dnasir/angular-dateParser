@@ -10,7 +10,7 @@ module NgDateParser {
             ngModel: '='
         };
         
-        constructor(private dateFilter, private $dateParser: IDateParser) { }
+        constructor(private dateFilter, private $dateParser: IDateParser, private $locale: ng.ILocaleService) { }
 
         link: ng.IDirectiveLinkFn = ($scope: ng.IScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes, ngModel: any) => {
             let dateFormat: string;
@@ -18,6 +18,12 @@ module NgDateParser {
             attrs.$observe('dateParser', (value: string) => {
                 dateFormat = value;
                 ngModel.$render();
+            });
+            
+            $scope.$watchCollection(() => this.$locale, (value, oldValue) => {
+                if(!angular.equals(value, oldValue)) {
+                    ngModel.$render();
+                }
             });
 
             ngModel.$parsers.unshift((viewValue) => {
@@ -45,8 +51,8 @@ module NgDateParser {
         }
         
         static factory(): ng.IDirectiveFactory {
-            let directive: ng.IDirectiveFactory = (dateFilter, $dateParser) => new DateParserDirective(dateFilter, $dateParser);
-            directive.$inject = ['dateFilter', '$dateParser'];
+            let directive: ng.IDirectiveFactory = (dateFilter, $dateParser, $locale) => new DateParserDirective(dateFilter, $dateParser, $locale);
+            directive.$inject = ['dateFilter', '$dateParser', '$locale'];
             return directive;
         }
     }

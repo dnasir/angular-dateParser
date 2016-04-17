@@ -343,15 +343,6 @@ module NgDateParser {
             }
             return null;
         }
-        
-        // static factory(): Function {
-        //     let factory = ($locale: ng.ILocaleService) => {
-        //         let instance = new DateParser($locale);
-        //         return (val, format) => instance.parse(val, format);
-        //     }
-        //     factory.$inject = ['$locale'];
-        //     return factory;
-        // }
     }
     
     angular.module('dateParser', [])

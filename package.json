@@ -17,6 +17,7 @@
     "angular-i18n": "^1.4.9"
   },
   "devDependencies": {
+    "angular-dynamic-locale": "^0.1.32",
     "angular-mocks": "^1.4.9",
     "bower": "^1.7.9",
     "del": "^2.2.0",

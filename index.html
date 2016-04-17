@@ -184,6 +184,20 @@
             <div ng-non-bindable>
 <pre class="brush: html" ng->&lt;input type="text" ng-model="date" date-parser="dd/MM/yyyy HH:mm Z" /&gt;</pre>
             </div>
+            
+            <h4>Dynamic locale support</h4>
+            
+            <div class="bs-docs-example">
+                <div class="input-prepend">
+                    <span class="add-on">Locale</span>
+                    <select ng-model="locale">
+                        <option value="en">English</option>
+                        <option value="ja">Japanese</option>
+                    </select>
+                    <input type="text" ng-model="date" date-parser="dd/MM/yyyy HH:mm Z" />
+                </div>
+                <p>Selected date: {{date | date:'MMM d, y h:mm a Z'}}</p>
+            </div>
 		</div>
 
         <footer class="footer">
@@ -194,12 +208,24 @@
         </footer>
 
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
-		<script src="dist/angular-dateparser.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/angular-dynamic-locale/0.1.32/tmhDynamicLocale.min.js"></script>
+		<script src="dist/angular-dateparser.js"></script>
         <script>
-            angular.module('demoApp', ['dateParser'])
-                .controller('controller', function($scope){
+            angular.module('demoApp', ['dateParser', 'tmh.dynamicLocale'])
+                .config(function($dateParserProvider, tmhDynamicLocaleProvider) {
+                    $dateParserProvider.watchLocale(true);
+                    tmhDynamicLocaleProvider.localeLocationPattern('//cdnjs.cloudflare.com/ajax/libs/angular-i18n/1.4.9/angular-locale_{{locale}}.js');
+                })
+                .controller('controller', function($scope, tmhDynamicLocale){
                     $scope.format = 'dd.MM.yyyy';
                     $scope.date = new Date();
+                    $scope.locale = 'en';
+                    
+                    $scope.$watch('locale', function(value, oldValue) {
+                        if(value !== oldValue) {
+                            tmhDynamicLocale.set(value);
+                        }
+                    });
                 });
         </script>
 

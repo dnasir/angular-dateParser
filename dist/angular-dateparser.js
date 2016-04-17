@@ -274,10 +274,11 @@ var NgDateParser;
 var NgDateParser;
 (function (NgDateParser) {
     var DateParserDirective = (function () {
-        function DateParserDirective(dateFilter, $dateParser) {
+        function DateParserDirective(dateFilter, $dateParser, $locale) {
             var _this = this;
             this.dateFilter = dateFilter;
             this.$dateParser = $dateParser;
+            this.$locale = $locale;
             this.restrict = 'A';
             this.require = 'ngModel';
             this.scope = {
@@ -288,6 +289,11 @@ var NgDateParser;
                 attrs.$observe('dateParser', function (value) {
                     dateFormat = value;
                     ngModel.$render();
+                });
+                $scope.$watchCollection(function () { return _this.$locale; }, function (value, oldValue) {
+                    if (!angular.equals(value, oldValue)) {
+                        ngModel.$render();
+                    }
                 });
                 ngModel.$parsers.unshift(function (viewValue) {
                     var date = _this.$dateParser(viewValue, dateFormat);
@@ -306,8 +312,8 @@ var NgDateParser;
             };
         }
         DateParserDirective.factory = function () {
-            var directive = function (dateFilter, $dateParser) { return new DateParserDirective(dateFilter, $dateParser); };
-            directive.$inject = ['dateFilter', '$dateParser'];
+            var directive = function (dateFilter, $dateParser, $locale) { return new DateParserDirective(dateFilter, $dateParser, $locale); };
+            directive.$inject = ['dateFilter', '$dateParser', '$locale'];
             return directive;
         };
         return DateParserDirective;
