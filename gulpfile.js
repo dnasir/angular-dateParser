@@ -8,7 +8,8 @@ var header = require("gulp-header");
 var rename = require("gulp-rename");
 var strip = require("gulp-strip-comments");
 var Server = require("karma").Server;
-var tsc = require('gulp-typescript');
+var tsc = require("gulp-typescript");
+var ghPages = require("gulp-gh-pages");
 
 var outputPath = "dist/";
 var pkg = require("./package.json");
@@ -70,6 +71,15 @@ gulp.task("build:minified", function() {
 });
 
 gulp.task("build", ["clean", "build:standard", "build:minified"]);
+
+gulp.task("gh-pages", ['build'], function() {
+    return gulp.src([
+        "dist/angular-dateparser.js",
+        "dist/angular-dateparser.js.map",
+        "index.html"
+    ])
+    .pipe(ghPages());
+});
 
 gulp.task("watch", ["build"], function() {
     return gulp.watch("src/**/*.ts", ["build", "test"]);
