@@ -2,7 +2,7 @@
 
 A simple parser that converts date and time strings into JavaScript Date objects.
 
-[Demo](http://dnasir.github.io/angular-dateParser/demo.html)
+[Demo](http://dnasir.github.io/angular-dateParser/)
 
 ## Prerequisites
 
