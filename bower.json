@@ -1,8 +1,9 @@
 {
   "name": "angular-dateParser",
-  "version": "1.0.14",
+  "version": "1.1.0-beta",
   "main": [
     "./dist/angular-dateparser.js",
+    "./dist/angular-dateparser.js.map",
     "./dist/angular-dateparser.min.js",
     "./dist/angular-dateparser.min.js.map"
   ],
@@ -19,10 +20,10 @@
     "test"
   ],
   "dependencies": {
-    "angular": "1.x",
-    "angular-i18n": "1.x"
+    "angular": "^1.4.9",
+    "angular-i18n": "^1.4.9"
   },
   "devDependencies": {
-    "angular-mocks": "1.x"
+    "angular-mocks": "^1.4.9"
   }
 }

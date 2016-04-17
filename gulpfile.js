@@ -8,6 +8,7 @@ var header = require("gulp-header");
 var rename = require("gulp-rename");
 var strip = require("gulp-strip-comments");
 var Server = require("karma").Server;
+var tsc = require('gulp-typescript');
 
 var outputPath = "dist/";
 var pkg = require("./package.json");
@@ -39,21 +40,39 @@ gulp.task("test", function(done) {
     server.start();
 });
 
-gulp.task("build", ["clean", "test"], function(done) {
-    return gulp.src(["dateparser.js", "dateparser.directive.js"])
-        .pipe(concat("angular-dateparser.js"))
-        .pipe(strip())
-        .pipe(header(banner, { pkg: pkg }))
-        .pipe(gulp.dest(outputPath))
-        .pipe(rename("angular-dateparser.min.js"))
+gulp.task("build:standard", function() {
+    return gulp.src("src/**/*.ts")
         .pipe(sourcemaps.init())
-        .pipe(uglify({
-            mangle: true,
-            preserveComments: "license"
+        .pipe(tsc({
+            target: "ES5",
+            outFile: "angular-dateparser.js",
+            removeComments: true
         }))
-        .pipe(sourcemaps.write("./"))
-        .pipe(gulp.dest(outputPath))
-        .on("end", done);
+        .pipe(header(banner, { pkg: pkg }))
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest(outputPath));
 });
 
-gulp.task("default", ["build"]);
+gulp.task("build:minified", function() {
+    return gulp.src("src/**/*.ts")
+        .pipe(sourcemaps.init())
+        .pipe(tsc({
+            target: "ES5",
+            outFile: "angular-dateparser.min.js",
+            removeComments: true
+        }))
+        .pipe(uglify({
+            mangle: false
+        }))
+        .pipe(header(banner, { pkg: pkg }))
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest(outputPath))
+});
+
+gulp.task("build", ["clean", "build:standard", "build:minified"]);
+
+gulp.task("watch", ["build"], function() {
+    return gulp.watch("src/**/*.ts", ["build", "test"]);
+});
+
+gulp.task("default", ["build", "test"]);

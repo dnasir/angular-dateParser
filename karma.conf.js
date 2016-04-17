@@ -16,8 +16,7 @@ module.exports = function(config) {
     files: [
       'node_modules/angular/angular.js',
       'node_modules/angular-mocks/angular-mocks.js',
-      './dateparser.js',
-      './dateparser.directive.js',
+      'dist/angular-dateparser.js',      
       'test/*.js'
     ],
 
