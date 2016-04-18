@@ -77,7 +77,9 @@ gulp.task("gh-pages", ['build'], function() {
         "dist/angular-dateparser.js",
         "dist/angular-dateparser.js.map",
         "index.html"
-    ])
+    ], {
+        base: "."
+    })
     .pipe(ghPages());
 });
 
