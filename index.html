@@ -1,144 +1,163 @@
 <!doctype html>
 <html ng-app="demoApp">
-	<head>
-		<meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<title>Angular DateParser Demo</title>
-		<meta name="description" content="">
-        <meta name="viewport" content="width=device-width">
 
-		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.css" />
-		<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shCore.css">
-        <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shThemeDefault.css">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Angular DateParser Demo</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shCore.css">
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shThemeDefault.css">
+
+    <style type="text/css">
+        .bs-docs-example {
+            position: relative;
+            margin: 15px 0;
+            padding: 39px 19px 14px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+        }
         
-		<style type="text/css">
-			.bs-docs-example {
-                position: relative;
-                margin: 15px 0;
-                padding: 39px 19px 14px;
-                background-color: #fff;
-                border: 1px solid #ddd;
-                -webkit-border-radius: 4px;
-                -moz-border-radius: 4px;
-                border-radius: 4px;
-            }
+        .bs-docs-example:after {
+            content: "Example";
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            padding: 3px 7px;
+            font-size: 12px;
+            font-weight: bold;
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            color: #9da0a4;
+            -webkit-border-radius: 4px 0 4px 0;
+            -moz-border-radius: 4px 0 4px 0;
+            border-radius: 4px 0 4px 0;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 70px;
+            border-top: 1px solid #e5e5e5;
+            background-color: #f5f5f5;
+        }
+        
+        .footer p {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
 
-            .bs-docs-example:after {
-                content: "Example";
-                position: absolute;
-                top: -1px;
-                left: -1px;
-                padding: 3px 7px;
-                font-size: 12px;
-                font-weight: bold;
-                background-color: #f5f5f5;
-                border: 1px solid #ddd;
-                color: #9da0a4;
-                -webkit-border-radius: 4px 0 4px 0;
-                -moz-border-radius: 4px 0 4px 0;
-                border-radius: 4px 0 4px 0;
-            }
+<body>
+    <div class="jumbotron">
+        <div class="container">
+            <h1>Angular DateParser</h1>
 
-			.footer {
-                text-align: center;
-                padding: 30px 0;
-                margin-top: 70px;
-                border-top: 1px solid #e5e5e5;
-                background-color: #f5f5f5;
-            }
+            <p>The AngularJS library has a <a href="http://docs.angularjs.org/api/ng/filter/date" target="_blank" title="AngularJS date filter">date filter</a>                that allows JavaScript Date objects to be displayed using a provided format. This is an awesome feature,
+                and it's great that you can use it anywhere, including text input boxes. But the problem is that it only
+                works one-way. There's currently no way to convert strings back into Date objects while using the same format
+                initially used to display it. This parser was designed to overcome this problem.</p>
 
-            .footer p {
-                margin-bottom: 0;
-            }
-		</style>
-	</head>
-	<body>
-		<div class="container" ng-controller="controller">
-			<header class="page-header">
-                <h1>AngularJS DateParser <small>Demo</small></h1>
-            </header>
+            <p>
+                <a href="https://github.com/dnasir/angular-dateParser" class="btn btn-default btn-lg">
+                    <i class="glyphicon glyphicon-share"></i>&nbsp;&nbsp;View on GitHub
+                </a>
+            </p>
+        </div>
+    </div>
+    <div class="container" ng-controller="controller">
+        <h2>Basic</h2>
+        <p>This is a basic example demonstrating how the parser can convert manually entered date strings into JavaScript Date
+            objects.
+        </p>
 
-            <p>The AngularJS library has a <a href="http://docs.angularjs.org/api/ng/filter/date" target="_blank" title="AngularJS date filter">date filter</a> that allows JavaScript Date objects to be displayed using a provided format. This is an awesome feature, and it's great that you can use it anywhere, including text input boxes. But the problem is that it only works one-way. There's currently no way to convert strings back into Date objects while using the same format initially used to display it. This parser was designed to overcome this problem.</p>
-
-            <h4>Basic</h4>
-            <p>This is a basic example demonstrating how the parser can convert manually entered date strings into JavaScript Date objects.</p>
-
-			<div class="bs-docs-example">
-                <p>
-                    <div class="input-prepend">
-                        <span class="add-on">Date and time</span>
-                        <input type="text" ng-model="date" date-parser="dd.MM.yyyy HH:mm" />
-                    </div>
-                </p>
-                <p>Selected date: {{date | date:'MMM d, y h:mm a'}}</p>
-			</div>
-
-            <h6>Code</h6>
-            <div>
-<pre class="brush: html">&lt;input type="text" ng-model="date" date-parser="dd.MM.yyyy HH:mm" /&gt;</pre>
-            </div>
-
-            <h4>Using Angular Date Formats</h4>
-            <p>The AngularJS date filter comes with several shortname formats that you can use. The DateParser can recognise these formats and will convert the date strings accordingly.</p>
-
-            <div class="bs-docs-example">
-                <p>
-                    <div class="input-prepend">
-                        <span class="add-on">medium</span>
-                        <input type="text" ng-model="date" date-parser="medium" />
-                    </div>
-                </p>
-
-                <p>
-                    <div class="input-prepend">
-                        <span class="add-on">short</span>
-                        <input type="text" ng-model="date" date-parser="short" />
-                    </div>
-                </p>
-
-                <p>
-                    <div class="input-prepend">
-                        <span class="add-on">fullDate</span>
-                        <input type="text" ng-model="date" date-parser="fullDate" />
-                    </div>
-                </p>
-
-                <p>
-                    <div class="input-prepend">
-                        <span class="add-on">longDate</span>
-                        <input type="text" ng-model="date" date-parser="longDate" />
-                    </div>
-                </p>
-                <p>
-                    <div class="input-prepend">
-                        <span class="add-on">mediumDate</span>
-                        <input type="text" ng-model="date" date-parser="mediumDate" />
-                    </div>
-                </p>
-                <p>
-                    <div class="input-prepend">
-                        <span class="add-on">shortDate</span>
-                        <input type="text" ng-model="date" date-parser="shortDate" />
-                    </div>
-                </p>
-                <p>
-                    <div class="input-prepend">
-                        <span class="add-on">mediumTime</span>
-                        <input type="text" ng-model="date" date-parser="mediumTime" />
-                    </div>
-                </p>
-                <p>
-                    <div class="input-prepend">
-                        <span class="add-on">shortTime</span>
-                        <input type="text" ng-model="date" date-parser="shortTime" />
+        <div class="bs-docs-example">
+            <div class="form-inline">
+                <p class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">Date and time</span>
+                        <input type="text" class="form-control" ng-model="date" date-parser="dd.MM.yyyy HH:mm" />
                     </div>
                 </p>
                 <p>Selected date: {{date | date:'MMM d, y h:mm a'}}</p>
             </div>
+        </div>
 
-            <h6>Code</h6>
-            <div>
-<pre class="brush: html">&lt;input type="text" ng-model="date" date-parser="medium" /&gt;
+        <h6>Code</h6>
+        <div>
+            <pre class="brush: html">&lt;input type="text" ng-model="date" date-parser="dd.MM.yyyy HH:mm" /&gt;</pre>
+        </div>
+
+        <h2>Using Angular Date Formats</h2>
+        <p>The AngularJS date filter comes with several shortname formats that you can use. The DateParser can recognise these
+            formats and will convert the date strings accordingly.</p>
+
+        <div class="bs-docs-example">
+            <div class="form-inline">
+                <p class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">medium</span>
+                        <input type="text" class="form-control" ng-model="date" date-parser="medium" />
+                    </div>
+                </p>
+
+                <p class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">short</span>
+                        <input type="text" class="form-control" ng-model="date" date-parser="short" />
+                    </div>
+                </p>
+
+                <p class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">fullDate</span>
+                        <input type="text" class="form-control" ng-model="date" date-parser="fullDate" />
+                    </div>
+                </p>
+
+                <p class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">longDate</span>
+                        <input type="text" class="form-control" ng-model="date" date-parser="longDate" />
+                    </div>
+                </p>
+                <p class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">mediumDate</span>
+                        <input type="text" class="form-control" ng-model="date" date-parser="mediumDate" />
+                    </div>
+                </p>
+                <p class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">shortDate</span>
+                        <input type="text" class="form-control" ng-model="date" date-parser="shortDate" />
+                    </div>
+                </p>
+                <p class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">mediumTime</span>
+                        <input type="text" class="form-control" ng-model="date" date-parser="mediumTime" />
+                    </div>
+                </p>
+                <p class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">shortTime</span>
+                        <input type="text" class="form-control" ng-model="date" date-parser="shortTime" />
+                    </div>
+                </p>
+                <p>Selected date: {{date | date:'MMM d, y h:mm a'}}</p>
+            </div>
+        </div>
+
+        <h6>Code</h6>
+        <div>
+            <pre class="brush: html">&lt;input type="text" ng-model="date" date-parser="medium" /&gt;
 &lt;input type="text" ng-model="date" date-parser="short" /&gt;
 &lt;input type="text" ng-model="date" date-parser="fullDate" /&gt;
 &lt;input type="text" ng-model="date" date-parser="longDate" /&gt;
@@ -147,71 +166,118 @@
 &lt;input type="text" ng-model="date" date-parser="mediumTime" /&gt;
 &lt;input type="text" ng-model="date" date-parser="shortTime" /&gt;
 </pre>
-            </div>
+        </div>
 
-            <h4>Dynamic Formats</h4>
-            <p>Date string formats can be changed on-the-fly and associated views will automatically be updated to use the new format.</p>
+        <h2>Dynamic Formats</h2>
+        <p>Date string formats can be changed on-the-fly and associated views will automatically be updated to use the new format.</p>
 
-            <div class="bs-docs-example">
-                <div class="input-prepend">
-                    <span class="add-on">Format</span>
-                    <input type="text" ng-model="format" />
-                </div>
-                <div class="input-prepend">
-                    <span class="add-on">Date</span>
-                    <input type="text" ng-model="date" date-parser="{{format}}" />
-                </div>
+        <div class="bs-docs-example">
+            <div class="form-inline">
+                <p class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">Format</span>
+                        <input type="text" class="form-control" ng-model="format" />
+                    </div>
+                </p>
+                <p class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">Date</span>
+                        <input type="text" class="form-control" ng-model="date" date-parser="{{format}}" />
+                    </div>
+                </p>
                 <p>Selected date: {{date | date:'MMM d, y h:mm a'}}</p>
             </div>
+        </div>
 
-            <h6>Code</h6>
-            <div ng-non-bindable>
-<pre class="brush: html" ng->&lt;input type="text" ng-model="date" date-parser="{{format}}" /&gt;</pre>
-            </div>
+        <h6>Code</h6>
+        <div ng-non-bindable>
+            <pre class="brush: html">&lt;input type="text" ng-model="date" date-parser="{{format}}" /&gt;</pre>
+        </div>
 
-            <h4>Timezones</h4>
-            <p>The parser also allows you to change the timezone. However, bear in mind that the model will still contain the date and time for the local timezone, minus the offset.</p>
+        <h2>Timezones</h2>
+        <p>The parser also allows you to change the timezone. However, bear in mind that the model will still contain the date
+            and time for the local timezone, minus the offset.</p>
 
-            <div class="bs-docs-example">
-                <div class="input-prepend">
-                    <span class="add-on">Date</span>
-                    <input type="text" ng-model="date" date-parser="dd/MM/yyyy HH:mm Z" />
-                </div>
+        <div class="bs-docs-example">
+            <div class="form-inline">
+                <p class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">Date</span>
+                        <input type="text" class="form-control" ng-model="date" date-parser="dd/MM/yyyy HH:mm Z" />
+                    </div>
+                </p>
                 <p>Selected date: {{date | date:'MMM d, y h:mm a Z'}}</p>
             </div>
-            
-            <h6>Code</h6>
-            <div ng-non-bindable>
-<pre class="brush: html" ng->&lt;input type="text" ng-model="date" date-parser="dd/MM/yyyy HH:mm Z" /&gt;</pre>
-            </div>
-            
-            <h4>Dynamic locale support</h4>
-            
-            <div class="bs-docs-example">
-                <div class="input-prepend">
-                    <span class="add-on">Locale</span>
-                    <select ng-model="locale">
-                        <option value="en">English</option>
-                        <option value="ja">Japanese</option>
-                    </select>
-                    <input type="text" ng-model="date" date-parser="dd/MM/yyyy HH:mm Z" />
-                </div>
+        </div>
+
+        <h6>Code</h6>
+        <div ng-non-bindable>
+            <pre class="brush: html">&lt;input type="text" ng-model="date" date-parser="dd/MM/yyyy HH:mm Z" /&gt;</pre>
+        </div>
+
+        <h2>Dynamic locale support</h2>
+        <p>You can also use <a href="http://lgalfaso.github.io/angular-dynamic-locale/">angular-dynamic-locale</a> to dynamically
+            switch the app locale.</p>
+
+        <div class="bs-docs-example">
+            <div class="form-inline">
+                <p class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">Locale</span>
+                        <select class="form-control" ng-model="locale">
+                            <option value="en">English</option>
+                            <option value="en-gb">English UK</option>
+                            <option value="de">Deutsch</option>
+                            <option value="fr">Français</option>
+                            <option value="ja">日本語</option>
+                        </select>
+                    </div>
+                </p>
+                <p class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">Date</span>
+                        <input type="text" class="form-control" ng-model="date" date-parser="dd/MM/yyyy HH:mm Z" />
+                    </div>
+                </p>
                 <p>Selected date: {{date | date:'MMM d, y h:mm a Z'}}</p>
             </div>
-		</div>
+        </div>
 
-        <footer class="footer">
-            <div class="container">
-                <p>Copyright &copy; 2014 <a href="http://dnasir.com" title="Dzulqarnain Nasir">Dzulqarnain Nasir</a></p>
-                <p>Code licensed under <a href="http://opensource.org/licenses/MIT" target="_blank" title="The MIT License">MIT License</a></p>
-            </div>
-        </footer>
+        <h6>Code</h6>
+        <div ng-non-bindable>
+            <pre class="brush: javascript">
+    angular.module('demoApp', ['dateParser', 'tmh.dynamicLocale'])
+        .config(function($dateParserProvider, tmhDynamicLocaleProvider) {
+            $dateParserProvider.watchLocale(true);
+            tmhDynamicLocaleProvider.localeLocationPattern('//cdnjs.cloudflare.com/ajax/libs/angular-i18n/1.4.9/angular-locale_{{locale}}.js');
+        })
+        .controller('controller', function($scope, tmhDynamicLocale){
+            $scope.format = 'dd.MM.yyyy';
+            $scope.date = new Date();
+            $scope.locale = 'en';
+            
+            $scope.$watch('locale', function(value, oldValue) {
+                if(value !== oldValue) {
+                    tmhDynamicLocale.set(value);
+                }
+            });
+        });
+</pre>
+        </div>
+    </div>
 
-		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/angular-dynamic-locale/0.1.32/tmhDynamicLocale.min.js"></script>
-		<script src="dist/angular-dateparser.js"></script>
-        <script>
-            angular.module('demoApp', ['dateParser', 'tmh.dynamicLocale'])
+    <footer class="footer">
+        <div class="container">
+            <p>Copyright &copy; 2014 <a href="http://dnasir.com" title="Dzulqarnain Nasir">Dzulqarnain Nasir</a></p>
+            <p>Code licensed under <a href="http://opensource.org/licenses/MIT" target="_blank" title="The MIT License">MIT License</a></p>
+        </div>
+    </footer>
+
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-dynamic-locale/0.1.32/tmhDynamicLocale.min.js"></script>
+    <script src="dist/angular-dateparser.js"></script>
+    <script>
+        angular.module('demoApp', ['dateParser', 'tmh.dynamicLocale'])
                 .config(function($dateParserProvider, tmhDynamicLocaleProvider) {
                     $dateParserProvider.watchLocale(true);
                     tmhDynamicLocaleProvider.localeLocationPattern('//cdnjs.cloudflare.com/ajax/libs/angular-i18n/1.4.9/angular-locale_{{locale}}.js');
@@ -227,12 +293,14 @@
                         }
                     });
                 });
-        </script>
+    </script>
 
-		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shCore.js"></script>
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shBrushXml.js"></script>
-        <script type="text/javascript">
-	        SyntaxHighlighter.all();
-	    </script>
-	</body>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shCore.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shBrushXml.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shBrushJScript.js"></script>
+    <script>
+        SyntaxHighlighter.all();
+    </script>
+</body>
+
 </html>
