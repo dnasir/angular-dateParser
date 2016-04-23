@@ -19,7 +19,7 @@ gulp.task("clean", function() {
     del([outputPath + "**/*"]);
 });
 
-gulp.task("test", function(done) {
+gulp.task("test", ["build"], function(done) {
     var server =  new Server({
         configFile: __dirname + "/karma.conf.js",
         singleRun: true
