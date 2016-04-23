@@ -1,6 +1,6 @@
 {
   "name": "angular-dateParser",
-  "version": "1.1.0-beta",
+  "version": "1.1.0",
   "main": [
     "./dist/angular-dateparser.js",
     "./dist/angular-dateparser.js.map",
