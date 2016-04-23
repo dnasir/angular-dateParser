@@ -103,6 +103,29 @@ describe('dateParser', function() {
             expect($dateParser(str3, format3)).toBe(undefined);
             expect($dateParser(str4, format4)).toBe(undefined);
         }));
+        
+        it('should be able to parse week numbers', inject(function($dateParser) {
+            var str1 = "Week 16 of 2016 00:00:00.000",
+                str2 = "Week 40 of 2011",
+                str3 = "Week 60 of 2016",
+                str4 = "23 April is in week 16 of 2016",
+                str5 = "23 April is in week 20 of 2016"
+            
+            var format1 = "'Week' w 'of' yyyy HH:mm:ss.sss",
+                format2 = "'Week' w 'of' yyyy",
+                format4 = "d MMMM 'is in week' w 'of' yyyy"
+            
+            var expected1 = new Date(2016, 3, 18, 0, 0, 0, 0),
+                expected2 = new Date(2011, 9, 3, 0, 0, 0, 0),
+                expected4 = new Date(2016, 3, 23, 0, 0, 0, 0)
+            
+            expect($dateParser(str1, format1).getTime()).toBe(expected1.getTime());
+            expect($dateParser(str2, format2).getTime()).toBe(expected2.getTime());
+            expect($dateParser(str3, format2)).toBeUndefined();
+            expect($dateParser(str4, format4).getTime()).toBe(expected4.getTime());
+            expect($dateParser(str5, format4)).toBeUndefined();
+            
+        }));
     });
 
     describe('Angular formats', function() {

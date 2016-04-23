@@ -2,12 +2,13 @@
 
 module NgDateParser {
     export interface IDateParser {
-        (val:any, format?: string): Date;
+        (val: any, format?: string): Date;
     }
-    
+
     class DateParser implements ng.IServiceProvider {
         'use strict';
-        
+
+        private $dateFilter: ng.IFilterDate;
         private $locale: ng.ILocaleService;
         private datetimeFormats: ng.ILocaleDateTimeFormatDescriptor;
         private monthNames: string[];
@@ -19,45 +20,46 @@ module NgDateParser {
             // Regex pattern cache
             this.cache = [];
             this._watchLocale = false;
-            this.$get.$inject = ['$locale', '$rootScope'];
+            this.$get.$inject = ['$filter', '$locale', '$rootScope'];
         }
-        
+
         updateFromLocale() {
             this.datetimeFormats = this.$locale.DATETIME_FORMATS;
             this.monthNames = this.datetimeFormats.MONTH.concat(this.datetimeFormats.SHORTMONTH);
             this.dayNames = this.datetimeFormats.DAY.concat(this.datetimeFormats.SHORTDAY);
         }
-        
+
         watchLocale(watch?: boolean) {
-            if(angular.isDefined(watch)){
+            if (angular.isDefined(watch)) {
                 this._watchLocale = watch;
             } else {
                 return this._watchLocale;
             }
         }
-        
-        $get = ($locale: ng.ILocaleService, $rootScope: ng.IRootScopeService) => {
+
+        $get = ($filter: ng.IFilterService, $locale: ng.ILocaleService, $rootScope: ng.IRootScopeService) => {
             this.$locale = $locale;
-            
+            this.$dateFilter = $filter('date');
+
             this.updateFromLocale();
-            
-            if(this._watchLocale) {
+
+            if (this._watchLocale) {
                 $rootScope.$watchCollection(() => $locale, () => {
                     this.updateFromLocale();
                 });
             }
-            
+
             return this.parse;
         }
-        
-        private parse: IDateParser = (val:any, format?: string): Date => {
+
+        private parse: IDateParser = (val: any, format?: string): Date => {
             // if it's a Date object, return as-is
             if (angular.isDate(val)) {
                 return val;
             }
-            
+
             // if it's anything other than a string, reject it
-            if(!angular.isString(val)){
+            if (!angular.isString(val)) {
                 return undefined;
             }
 
@@ -77,9 +79,10 @@ module NgDateParser {
                     i_val = 0,
                     i_format = 0,
                     format_token = '',
-                    year = now.getFullYear(),
-                    month = now.getMonth() + 1,
-                    date = now.getDate(),
+                    year = null,
+                    week = null,
+                    month = null,
+                    date = null,
                     hh = 0,
                     mm = 0,
                     ss = 0,
@@ -152,6 +155,10 @@ module NgDateParser {
                                 year = 2000 + (year - 0);
                             }
                         }
+                    } else if (token === 'ww' || token === 'w') {
+                        week = this.getInteger(val, i_val, token.length, 2);
+
+                        i_val += Math.max(week.toString().length, token.length);
                     } else if (token === 'MMMM' || token === 'MMM') {
                         month = 0;
 
@@ -315,7 +322,27 @@ module NgDateParser {
                     hh -= 12;
                 }
 
-                var localDate = new Date(year, month - 1, date, hh, mm, ss, sss);
+                var localDate = new Date(year || now.getFullYear(), (month !== null ? month - 1 : now.getMonth()), date || now.getDate(), hh, mm, ss, sss);
+                if (week !== null) {
+                    var dateFromISOWeek = this.getDateOfISOWeek(week, year || now.getFullYear(), month, date);
+                    if (dateFromISOWeek) {
+                        if (month !== null) {
+                            dateFromISOWeek.setMonth(month - 1);
+                        }
+                        if (date !== null) {
+                            dateFromISOWeek.setDate(date);
+                        }
+
+                        dateFromISOWeek.setHours(hh);
+                        dateFromISOWeek.setMinutes(mm);
+                        dateFromISOWeek.setSeconds(ss);
+                        dateFromISOWeek.setMilliseconds(sss);
+
+                        localDate = dateFromISOWeek;
+                    } else {
+                        throw 'Invalid week number or week number/date mismatch';
+                    }
+                }
 
                 if (parsedZ) {
                     return new Date(localDate.getTime() - (z + localDate.getTimezoneOffset()) * 60000);
@@ -323,11 +350,11 @@ module NgDateParser {
 
                 return localDate;
             } catch (e) {
-                // do we need to log the error somewhere?
+                console.info(e);
                 return undefined;
             }
         }
-        
+
         private getInteger(input: string, startPoint: number, minLength: number, maxLength: number): number {
             var val = input.substring(startPoint);
             var key = `${minLength}_${maxLength}`;
@@ -343,8 +370,41 @@ module NgDateParser {
             }
             return null;
         }
+
+        private getDateOfISOWeek(week: number, year: number, month?: number, date?: number): Date {
+            if (week < 1) return undefined;
+
+            var simple = new Date(year, 0, 1 + (week - 1) * 7);
+            var dow = simple.getDay();
+            var ISOweekStart = simple;
+
+            if (dow <= 4) {
+                ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
+            } else {
+                ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
+            }
+
+            if (ISOweekStart.getFullYear() !== year) {
+                return undefined;
+            }
+
+            if (month !== null) {
+                if (ISOweekStart.getMonth() !== month - 1) {
+                    return undefined;
+                }
+            }
+
+            if (date !== null) {
+                var isoWeekDate = ISOweekStart.getDate();
+                if (date < isoWeekDate && date > isoWeekDate + 6) {
+                    return undefined;
+                }
+            }
+
+            return ISOweekStart;
+        }
     }
-    
+
     angular.module('dateParser', [])
         .provider('$dateParser', DateParser);
 }
