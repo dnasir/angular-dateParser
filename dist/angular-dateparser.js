@@ -10,8 +10,9 @@ var NgDateParser;
     var DateParser = (function () {
         function DateParser() {
             var _this = this;
-            this.$get = function ($locale, $rootScope) {
+            this.$get = function ($filter, $locale, $rootScope) {
                 _this.$locale = $locale;
+                _this.$dateFilter = $filter('date');
                 _this.updateFromLocale();
                 if (_this._watchLocale) {
                     $rootScope.$watchCollection(function () { return $locale; }, function () {
@@ -34,7 +35,7 @@ var NgDateParser;
                     if (_this.datetimeFormats != null && _this.datetimeFormats[format]) {
                         format = _this.datetimeFormats[format];
                     }
-                    var now = new Date(), i_val = 0, i_format = 0, format_token = '', year = now.getFullYear(), month = now.getMonth() + 1, date = now.getDate(), hh = 0, mm = 0, ss = 0, sss = 0, ampm = 'am', z = 0, parsedZ = false;
+                    var now = new Date(), i_val = 0, i_format = 0, format_token = '', year = null, week = null, month = null, date = null, hh = 0, mm = 0, ss = 0, sss = 0, ampm = 'am', z = 0, parsedZ = false;
                     while (i_format < format.length) {
                         format_token = format.charAt(i_format);
                         var token = '';
@@ -80,6 +81,10 @@ var NgDateParser;
                                     year = 2000 + (year - 0);
                                 }
                             }
+                        }
+                        else if (token === 'ww' || token === 'w') {
+                            week = _this.getInteger(val, i_val, token.length, 2);
+                            i_val += Math.max(week.toString().length, token.length);
                         }
                         else if (token === 'MMMM' || token === 'MMM') {
                             month = 0;
@@ -225,19 +230,39 @@ var NgDateParser;
                     else if (hh > 11 && ampm === 'AM') {
                         hh -= 12;
                     }
-                    var localDate = new Date(year, month - 1, date, hh, mm, ss, sss);
+                    var localDate = new Date(year || now.getFullYear(), (month !== null ? month - 1 : now.getMonth()), date || now.getDate(), hh, mm, ss, sss);
+                    if (week !== null) {
+                        var dateFromISOWeek = _this.getDateOfISOWeek(week, year || now.getFullYear(), month, date);
+                        if (dateFromISOWeek) {
+                            if (month !== null) {
+                                dateFromISOWeek.setMonth(month - 1);
+                            }
+                            if (date !== null) {
+                                dateFromISOWeek.setDate(date);
+                            }
+                            dateFromISOWeek.setHours(hh);
+                            dateFromISOWeek.setMinutes(mm);
+                            dateFromISOWeek.setSeconds(ss);
+                            dateFromISOWeek.setMilliseconds(sss);
+                            localDate = dateFromISOWeek;
+                        }
+                        else {
+                            throw 'Invalid week number or week number/date mismatch';
+                        }
+                    }
                     if (parsedZ) {
                         return new Date(localDate.getTime() - (z + localDate.getTimezoneOffset()) * 60000);
                     }
                     return localDate;
                 }
                 catch (e) {
+                    console.info(e);
                     return undefined;
                 }
             };
             this.cache = [];
             this._watchLocale = false;
-            this.$get.$inject = ['$locale', '$rootScope'];
+            this.$get.$inject = ['$filter', '$locale', '$rootScope'];
         }
         DateParser.prototype.updateFromLocale = function () {
             this.datetimeFormats = this.$locale.DATETIME_FORMATS;
@@ -265,6 +290,34 @@ var NgDateParser;
                 return Number(match[1]);
             }
             return null;
+        };
+        DateParser.prototype.getDateOfISOWeek = function (week, year, month, date) {
+            if (week < 1)
+                return undefined;
+            var simple = new Date(year, 0, 1 + (week - 1) * 7);
+            var dow = simple.getDay();
+            var ISOweekStart = simple;
+            if (dow <= 4) {
+                ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
+            }
+            else {
+                ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
+            }
+            if (ISOweekStart.getFullYear() !== year) {
+                return undefined;
+            }
+            if (month !== null) {
+                if (ISOweekStart.getMonth() !== month - 1) {
+                    return undefined;
+                }
+            }
+            if (date !== null) {
+                var isoWeekDate = ISOweekStart.getDate();
+                if (date < isoWeekDate && date > isoWeekDate + 6) {
+                    return undefined;
+                }
+            }
+            return ISOweekStart;
         };
         return DateParser;
     }());
