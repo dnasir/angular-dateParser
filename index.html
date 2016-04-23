@@ -59,7 +59,8 @@
         <div class="container">
             <h1>Angular DateParser</h1>
 
-            <p>The AngularJS library has a <a href="http://docs.angularjs.org/api/ng/filter/date" target="_blank" title="AngularJS date filter">date filter</a>                that allows JavaScript Date objects to be displayed using a provided format. This is an awesome feature,
+            <p>The AngularJS library has a <a href="http://docs.angularjs.org/api/ng/filter/date" target="_blank" title="AngularJS date filter">date filter</a>
+                that allows JavaScript Date objects to be displayed using a provided format. This is an awesome feature,
                 and it's great that you can use it anywhere, including text input boxes. But the problem is that it only
                 works one-way. There's currently no way to convert strings back into Date objects while using the same format
                 initially used to display it. This parser was designed to overcome this problem.</p>
@@ -235,8 +236,52 @@
                 </p>
                 <p class="form-group">
                     <div class="input-group">
-                        <span class="input-group-addon">Date</span>
-                        <input type="text" class="form-control" ng-model="date" date-parser="dd/MM/yyyy HH:mm Z" />
+                        <span class="input-group-addon">medium</span>
+                        <input type="text" class="form-control" ng-model="date" date-parser="medium" />
+                    </div>
+                </p>
+                <p class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">short</span>
+                        <input type="text" class="form-control" ng-model="date" date-parser="short" />
+                    </div>
+                </p>
+
+                <p class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">fullDate</span>
+                        <input type="text" class="form-control" ng-model="date" date-parser="fullDate" />
+                    </div>
+                </p>
+
+                <p class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">longDate</span>
+                        <input type="text" class="form-control" ng-model="date" date-parser="longDate" />
+                    </div>
+                </p>
+                <p class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">mediumDate</span>
+                        <input type="text" class="form-control" ng-model="date" date-parser="mediumDate" />
+                    </div>
+                </p>
+                <p class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">shortDate</span>
+                        <input type="text" class="form-control" ng-model="date" date-parser="shortDate" />
+                    </div>
+                </p>
+                <p class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">mediumTime</span>
+                        <input type="text" class="form-control" ng-model="date" date-parser="mediumTime" />
+                    </div>
+                </p>
+                <p class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">shortTime</span>
+                        <input type="text" class="form-control" ng-model="date" date-parser="shortTime" />
                     </div>
                 </p>
                 <p>Selected date: {{date | date:'MMM d, y h:mm a Z'}}</p>
