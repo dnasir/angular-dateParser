@@ -12,6 +12,10 @@ A simple parser that converts date and time strings into JavaScript Date objects
 
     bower install angular-dateParser --save
 
+or
+
+    npm install angular-dateParser --save
+
 ## Usage
 
 Simply include the parser file, add it as a dependency and call it like so:
