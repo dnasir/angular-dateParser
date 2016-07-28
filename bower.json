@@ -1,12 +1,7 @@
 {
   "name": "angular-dateParser",
   "version": "1.1.0",
-  "main": [
-    "./dist/angular-dateparser.js",
-    "./dist/angular-dateparser.js.map",
-    "./dist/angular-dateparser.min.js",
-    "./dist/angular-dateparser.min.js.map"
-  ],
+  "main": "./dist/angular-dateparser.js",
   "homepage": "https://github.com/dnasir/angular-dateParser",
   "authors": [
     "Dzulqarnain Nasir"
