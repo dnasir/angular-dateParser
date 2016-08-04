@@ -36,6 +36,7 @@ var NgDateParser;
                         format = _this.datetimeFormats[format];
                     }
                     var now = new Date(), i_val = 0, i_format = 0, format_token = '', year = null, week = null, month = null, date = null, hh = 0, mm = 0, ss = 0, sss = 0, ampm = 'am', z = 0, parsedZ = false;
+                    now = new Date(now.getFullYear(), now.getMonth(), 1);
                     while (i_format < format.length) {
                         format_token = format.charAt(i_format);
                         var token = '';
