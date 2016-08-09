@@ -90,6 +90,10 @@ module NgDateParser {
                     ampm = 'am',
                     z = 0,
                     parsedZ = false;
+                
+                // FIX: don't take the current date, it could have a day of the month that is higher than the parsed date
+                // example: parse "February 2013" with the current date of "30 April 2013"
+                now = new Date(now.getFullYear(), now.getMonth(), 1);
 
                 // TODO: Extract this into a helper function perhaps?
                 while (i_format < format.length) {
