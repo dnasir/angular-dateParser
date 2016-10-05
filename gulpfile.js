@@ -42,7 +42,7 @@ gulp.task("test", ["build"], function(done) {
 });
 
 gulp.task("build:standard", function() {
-    return gulp.src("src/**/*.ts")
+    return gulp.src("src/modules/*.ts")
         .pipe(sourcemaps.init())
         .pipe(tsc({
             target: "ES5",
@@ -55,7 +55,7 @@ gulp.task("build:standard", function() {
 });
 
 gulp.task("build:minified", function() {
-    return gulp.src("src/**/*.ts")
+    return gulp.src("src/modules/*.ts")
         .pipe(sourcemaps.init())
         .pipe(tsc({
             target: "ES5",

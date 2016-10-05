@@ -1,4 +1,5 @@
 ///<reference path="../all.d.ts"/>
+///<reference path="DateParser.ts"/>
 
 module NgDateParser {
     class DateParserDirective implements ng.IDirective {
@@ -9,7 +10,7 @@ module NgDateParser {
         scope = {
             ngModel: '='
         };
-        
+
         constructor(private dateFilter, private $dateParser: IDateParser, private $locale: ng.ILocaleService) { }
 
         link: ng.IDirectiveLinkFn = ($scope: ng.IScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes, ngModel: any) => {
@@ -19,7 +20,7 @@ module NgDateParser {
                 dateFormat = value;
                 ngModel.$render();
             });
-            
+
             $scope.$watchCollection(() => this.$locale, (value, oldValue) => {
                 if(!angular.equals(value, oldValue)) {
                     ngModel.$render();
@@ -49,14 +50,14 @@ module NgDateParser {
                 return angular.isDate(modelValue) ? this.dateFilter(modelValue, dateFormat) : '';
             });
         }
-        
+
         static factory(): ng.IDirectiveFactory {
             let directive: ng.IDirectiveFactory = (dateFilter, $dateParser, $locale) => new DateParserDirective(dateFilter, $dateParser, $locale);
             directive.$inject = ['dateFilter', '$dateParser', '$locale'];
             return directive;
         }
     }
-    
+
     angular.module('dateParser')
         .directive('dateParser', DateParserDirective.factory());
 }
