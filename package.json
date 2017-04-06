@@ -1,7 +1,7 @@
 {
   "author": "Dzulqarnain Nasir",
   "name": "angular-dateParser",
-  "version": "1.1.1",
+  "version": "1.2.0-prerelease",
   "homepage": "https://github.com/dnasir/angular-dateParser",
   "license": "MIT",
   "bugs": "https://github.com/dnasir/angular-dateParser/issues",
@@ -9,31 +9,29 @@
     "type": "git",
     "url": "git@github.com:dnasir/angular-dateParser.git"
   },
+  "main": "dist/angular-dateparser.js",
   "scripts": {
-    "karma": "karma start"
+    "test": "karma start",
+    "build": "webpack -p",
+    "build:debug": "webpack"
   },
   "dependencies": {
-    "angular": "^1.4.9",
-    "angular-i18n": "^1.4.9"
+    "@types/angular": "^1.6.14",
+    "angular": "^1.6.4",
+    "angular-i18n": "^1.6.4",
+    "ts-loader": "^2.0.3",
+    "typescript": "^2.2.2",
+    "webpack": "^2.3.3"
   },
   "devDependencies": {
+    "@types/angular-mocks": "^1.5.9",
+    "@types/jasmine": "^2.5.47",
     "angular-dynamic-locale": "^0.1.32",
-    "angular-mocks": "^1.4.9",
-    "bower": "^1.7.9",
-    "del": "^2.2.0",
-    "gulp": "^3.9.1",
-    "gulp-concat": "^2.6.0",
-    "gulp-gh-pages": "^0.5.4",
-    "gulp-header": "^1.7.1",
-    "gulp-rename": "^1.2.2",
-    "gulp-sourcemaps": "^1.6.0",
-    "gulp-strip-comments": "^2.4.3",
-    "gulp-typescript": "^2.13.0",
-    "gulp-uglify": "^1.5.3",
-    "gulp-util": "^3.0.7",
-    "jasmine-core": "^2.4.1",
-    "karma": "^0.13.22",
-    "karma-chrome-launcher": "^0.2.3",
-    "karma-jasmine": "^0.3.8"
+    "angular-mocks": "^1.6.4",
+    "jasmine-core": "^2.5.2",
+    "karma": "^1.6.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-jasmine": "^1.1.0",
+    "karma-typescript": "^3.0.0"
   }
 }

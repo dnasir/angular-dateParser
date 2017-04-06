@@ -318,14 +318,14 @@
         </div>
     </footer>
 
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-dynamic-locale/0.1.32/tmhDynamicLocale.min.js"></script>
     <script src="dist/angular-dateparser.js"></script>
     <script>
         angular.module('demoApp', ['dateParser', 'tmh.dynamicLocale'])
                 .config(function($dateParserProvider, tmhDynamicLocaleProvider) {
                     $dateParserProvider.watchLocale(true);
-                    tmhDynamicLocaleProvider.localeLocationPattern('//cdnjs.cloudflare.com/ajax/libs/angular-i18n/1.4.9/angular-locale_{{locale}}.js');
+                    tmhDynamicLocaleProvider.localeLocationPattern('//cdnjs.cloudflare.com/ajax/libs/angular-i18n/1.6.4/angular-locale_{{locale}}.js');
                 })
                 .controller('controller', function($scope, tmhDynamicLocale){
                     $scope.format = 'dd.MM.yyyy';
