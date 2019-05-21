@@ -18,10 +18,7 @@
   "dependencies": {
     "@types/angular": "^1.6.14",
     "angular": "^1.6.4",
-    "angular-i18n": "^1.6.4",
-    "ts-loader": "^2.0.3",
-    "typescript": "^2.2.2",
-    "webpack": "^2.3.3"
+    "angular-i18n": "^1.6.4"
   },
   "devDependencies": {
     "@types/angular-mocks": "^1.5.9",
@@ -32,6 +29,9 @@
     "karma": "^1.6.0",
     "karma-chrome-launcher": "^2.0.0",
     "karma-jasmine": "^1.1.0",
-    "karma-typescript": "^3.0.0"
+    "karma-typescript": "^3.0.0",
+    "ts-loader": "^2.0.3",
+    "typescript": "^2.2.2",
+    "webpack": "^2.3.3"
   }
 }
