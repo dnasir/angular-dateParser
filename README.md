@@ -1,3 +1,5 @@
+## No longer maintained
+
 # Angular DateParser
 
 A simple parser that converts date and time strings into JavaScript Date objects.
